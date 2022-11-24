@@ -2,7 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
-
+const {dbConnection} = require('../database/config');
 
 class server{
     constructor(){
@@ -10,7 +10,7 @@ class server{
         this.port = process.env.PORT;
         
         //DB
-        //this.conectarDB();
+        this.conectarDB();
 
         //Middlewares
         this.middlewares();
@@ -20,7 +20,7 @@ class server{
     }
 
     async conectarDB(){
-        //await dbConnection();
+        await dbConnection();
     }
 
     middlewares(){
