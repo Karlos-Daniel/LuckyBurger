@@ -3,7 +3,7 @@ require('dotenv').config();
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const {dbConnection} = require('../database/config');
-
+const routesCategoria = require('../routes/categorias.routes');
 class server{
     constructor(){
         this.app = express();
@@ -16,7 +16,7 @@ class server{
         this.middlewares();
                 
         //Rutas de mi aplicacion
-        //this.routes();
+        this.routes();
     }
 
     async conectarDB(){
@@ -35,7 +35,7 @@ class server{
 
     routes(){
         
-        //this.app.use(routesUsuario);
+        this.app.use(routesCategoria);
         
     }
 
