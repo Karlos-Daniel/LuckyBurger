@@ -1,10 +1,10 @@
-const { response } = require("express");
+const { response, json } = require("express");
 const {Categoria,Usuario} = require('../models');
 
 //obtener categorias - paginado - total - populate
 const categoriasGet = async(req = request, res = response)=>{
 
-    const {limite = "6",desde} = req.query;
+    const {limite,desde} = req.query;
     const query = {estado: true};
     
 
@@ -28,10 +28,13 @@ const categoriaById = async(req , res = response)=>{
     try {
         const {id} = req.params
         const {nombreCategoria, estado, descripcion} = await Categoria.findById(id);
-        
+        if(!estado){
+            return json({
+                msg: 'no se encuentra la categoria'
+            })
+        }
         return res.json({
             nombreCategoria:nombreCategoria,
-            estado:estado,
             descripcion: descripcion
         })
     } catch (error) {

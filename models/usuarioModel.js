@@ -39,11 +39,7 @@ const usuarioSchema = Schema({
     imgUsuario: {
         type: String,
     },
-    rol: {
-        type: String,
-        require: [true],
-        emun: ['ADMIN_ROLE', 'USER_ROLE']
-    },
+    
 });
 
 usuarioSchema.methods.toJSON = function () {
