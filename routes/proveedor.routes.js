@@ -7,11 +7,11 @@ const {validarCampos, existeProveedorById } = require('../middlewares');
 const router = Router();
 
 
-router.get('/categorias',proveedorGet);
+router.get('/proveedores',proveedorGet);
 
 
 
-router.get('/categoria/:id',[
+router.get('/proveedor/:id',[
     check('id','No es un ID valido de MongoDB').isMongoId(),
     check('id').custom( existeProveedorById ),
     validarCampos
@@ -19,7 +19,7 @@ router.get('/categoria/:id',[
 
 
 
-router.post('/crear/categorias',[
+router.post('/crear/proveedores',[
     check('nombreProveedor','El nombreProveedor es obligatorio').not().isEmpty(),
     validarCampos
 ],crearProveedor);
@@ -27,7 +27,7 @@ router.post('/crear/categorias',[
 
 
 
-router.put('/editar/categorias/:id',[
+router.put('/editar/proveedores/:id',[
     check('id','No es un ID valido de MongoDB').isMongoId(),
     check('id').custom( existeProveedorById ),
     check('nombreProveedor','El nombre es obligatorio').not().isEmpty(),
@@ -37,7 +37,7 @@ router.put('/editar/categorias/:id',[
 
 
 
-router.delete('/delete/categorias/:id',[
+router.delete('/delete/proveedor/:id',[
     check('id','No es un ID valido de MongoDB').isMongoId(),
     check('id').custom( existeProveedorById ),
 ],borrarProveedor)

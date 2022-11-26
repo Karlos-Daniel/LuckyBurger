@@ -5,16 +5,21 @@ const ingresoSchema = Schema({
     totalIngreso:{
         type: Number,
         require: true,
-        default: 1,
     },
     fechaIngreso: {
         type: Date,
-        require: true
+        require: true,
+        default: Date.now
     },
     descripcionIngreso: {
         type: String,
         require: true
+    },estado:{
+        type: Boolean,
+        default: true,
+        require:true
     },
+
     
 
 

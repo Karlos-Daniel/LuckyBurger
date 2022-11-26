@@ -5,6 +5,7 @@ const fileUpload = require('express-fileupload');
 const {dbConnection} = require('../database/config');
 const routesCategoria = require('../routes/categorias.routes');
 const routesProveedor = require('../routes/proveedor.routes');
+const routesIngreso = require('../routes/ingreso.routes');
 class server{
     constructor(){
         this.app = express();
@@ -37,7 +38,8 @@ class server{
     routes(){
         
         this.app.use(routesCategoria);
-        this.app.use(routesProveedor)
+        this.app.use(routesProveedor);
+        this.app.use(routesIngreso);
         
         
     }
