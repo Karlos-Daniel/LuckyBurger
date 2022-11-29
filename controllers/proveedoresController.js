@@ -29,7 +29,7 @@ const proveedorById = async(req , res = response)=>{
         const {id} = req.params
         const {nombreProveedor, descripcion, NIT,direccionProveedor,contacto,estado} = await Proveedor.findById(id);
         
-        if(!estado){
+        if(estado==false){
             return res.json({
                 msg: 'no se encuentra el proveedor'
             })
@@ -55,7 +55,7 @@ const proveedorActualizar = async(req = request, res = response)=>{
         const {estado, ...data} = req.body;
 
         
-        if(!estado){
+        if(estado==false){
             return res.json({
                 msg: 'El proveedor no se encuentra'
             })
