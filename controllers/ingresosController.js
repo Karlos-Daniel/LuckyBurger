@@ -28,11 +28,18 @@ const ingresoById = async(req , res = response)=>{
     
     try {
         const {id} = req.params
-        const {totalIngreso, descripcion} = await Ingreso.findById(id);
+        const {totalIngreso,descripcionIngreso,estado} = await Ingreso.findById(id);
         
+        if(estado==false){
+            return res.json({
+                msg: `El ingreso ${id} no se encuentra en la base de datos, ha sido borrado`
+            })
+        }
+
+
         return res.json({
-            totalIngreso: totalIngreso,
-            descripcion: descripcion
+            totalIngreso,
+            descripcionIngreso
         })
     } catch (error) {
         
@@ -45,7 +52,13 @@ const ingresoActualizar = async(req = request, res = response)=>{
         //VALIDA CREADOR
         const {id} = req.params;
         const {estado, ...data} = req.body;
-           
+        
+        if(estado==false){
+            return res.json({
+                msg: `El ingreso ${id} no se encuentra en la base de datos, ha sido borrado`
+            })
+        }
+
         const ingreso = await Ingreso.findByIdAndUpdate(id, data,{new: true})
 
         res.json(ingreso)
@@ -75,13 +88,13 @@ const crearIngreso = async(req,res = response)=>{
 
     try {
         
-        const {totalIngreso,descripcion} = req.body
+        const {totalIngreso,descripcionIngreso} = req.body
                     
     
         //Generar data a guardar
         const data = {
             totalIngreso,
-            descripcion
+            descripcionIngreso
         }
         const ingreso = new Ingreso(data);
     

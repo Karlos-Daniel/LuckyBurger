@@ -19,7 +19,7 @@ router.get('/ingreso/:id',[
 
 
 router.post('/crear/ingreso',[
-    check('descripcion','La descripcion es obligatorio').not().isEmpty(),
+    check('descripcionIngreso','La descripcion es obligatorio').not().isEmpty(),
     check('totalIngreso','La descripcion es obligatorio').not().isEmpty(),
     validarCampos
 ],crearIngreso);
@@ -29,7 +29,7 @@ router.post('/crear/ingreso',[
 
 router.put('/editar/ingreso/:id',[
     check('id','No es un ID valido de MongoDB').isMongoId(),
-    check('descripcion','La descripcion es obligatorio').not().isEmpty(),
+    check('descripcionIngreso','La descripcion es obligatorio').not().isEmpty(),
     check('totalIngreso','La descripcion es obligatorio').not().isEmpty(),
     validarCampos
 ],ingresoActualizar);
