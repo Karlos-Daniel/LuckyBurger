@@ -1,25 +1,8 @@
 const{response,request}= require('express');
-const Usuario = require('../models/usuario'); 
+const Usuario = require('../models/usuarioModel')
 const brcryptjs = require('bcryptjs');
-const { Proveedor } = require('../models');
 
 
-// const usuariosGet = async(req = request, res = response)=>{
-
-//     const {limite = "6",desde} = req.query;
-//     const query = {estado: true};
-
-//     const resp = await Promise.all([
-//         Usuario.countDocuments(query),
-//         Usuario.find(query)
-//         .skip(desde)
-//         .limit(limite)
-//     ]);
-
-//    return res.json({
-//         resp
-//    });
-// }
 const usuariosPost = async(req = request, res = response)=>{
     try {
         
@@ -62,8 +45,14 @@ const usuariosPost = async(req = request, res = response)=>{
     try {
         
         const {id} = req.params;
-        const usuarioExiste = await Proveedor.findById(id);
-        const {nombre1,
+        const {estado,nombre1} = await Usuario.findById(id);
+        
+        if(estado==false){
+            return res.json({
+                msg: `El usuario${nombre1} ha sido borrado previamente`
+            })
+        }
+        const {
             nombre2,
             apellido1,
             apellido2,
@@ -80,9 +69,13 @@ const usuariosPost = async(req = request, res = response)=>{
                 direccion,
                 password
             }
-
+            
+       
+            //Encriptar contraseña
+             const salt =  brcryptjs.genSaltSync();
+             data.password = brcryptjs.hashSync(password,salt);
         const usuarioDB = await Usuario.findByIdAndUpdate(id, data);
-
+            console.log(data);
         res.json({
             msg: 'Ha sido cambiado con exito',
             data
@@ -104,8 +97,7 @@ try {
 
 
    res.json({
-        usuario,
-        usuarioAuth
+        msg: 'usuario borrado con exito'
    })
 } catch (error) {
     console.log(error);
