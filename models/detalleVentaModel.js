@@ -17,6 +17,11 @@ const detalleSchema = Schema({
         ref: 'Producto',
         require: true
     },
+    adicion:{
+        type:Schema.Types.ObjectId,
+        ref: 'Producto',
+        default: ''
+    },
     venta:{
         type: Schema.Types.ObjectId,
         ref: 'Venta',

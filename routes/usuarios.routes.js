@@ -25,6 +25,8 @@ router.post('/crear/usuario',errores,usuariosPost);
 //Borrar usuario por ID
 router.delete('/borrar/usuario/:id',[
     check('id','No es un ID valido de MongoDB').isMongoId(),
+    check('correo').custom(emailExiste),
+    check('correo','El correo no es valido').isEmail(),
     check('id').custom(existeUsuarioById),
     validarCampos
 ],usuariosDelete);

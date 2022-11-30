@@ -1,8 +1,7 @@
 const {response, request, json} = require('express');
-const Usuario = require('../models/usuario');
+const {Usuario} = require('../models');
 const bcryptjs = require('bcryptjs');
-const {googleVerify} = require('../helpers/google-verify')
-const { generarJWT } = require('../helpers/generar-jwt');
+
 
 
 const login = async(req= request, res= response)=>{
@@ -11,7 +10,9 @@ const login = async(req= request, res= response)=>{
         const {correo,password} = req.body;
         
         //Verificar si el email existe
-        const usuario = await Usuario.findOne({correo});
+        const usuario = await Usuario.findOne({correo})
+        
+        console.log(usuario.estado);
         if(!usuario){
             return res.status(400).json({
                 msg: 'Correo no se encuentra registrado'
@@ -30,12 +31,10 @@ const login = async(req= request, res= response)=>{
                 msg: 'Contraseña incorrecta'
             })
         }
-        //Generar JWT
-        const token = await generarJWT(usuario.id);
+        
 
             res.json({
                 usuario,
-                token
             })
         
     } catch (error) {
@@ -49,5 +48,4 @@ const login = async(req= request, res= response)=>{
 
 module.exports = {
     login,
-    
 }
