@@ -14,7 +14,6 @@ const productoSchema = Schema({
     stock:{
         type: Number,
         default: 0,
-        require:true
     },
     precio: {
         type: Number,
@@ -32,6 +31,11 @@ const productoSchema = Schema({
     categoria:{
         type: Schema.Types.ObjectId,
         ref: 'Categoria',
+        require: true
+    },
+    proveedor:{
+        type: Schema.Types.ObjectId,
+        ref: 'Proveedor',
         require: true
     },
 
