@@ -36,9 +36,7 @@ const usuarioSchema = Schema({
         type: Boolean,
         default: true
     },
-    imgUsuario: {
-        type: String,
-    },
+    
     
 });
 

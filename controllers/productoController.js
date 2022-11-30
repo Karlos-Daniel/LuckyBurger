@@ -1,5 +1,5 @@
 const { response } = require("express");
-const {Producto,Usuario} = require('../models');
+const {Producto,Categoria} = require('../models');
 
 //obtener productos - paginado - total - populate
 const productosGet = async(req = request, res = response)=>{
@@ -14,8 +14,9 @@ const productosGet = async(req = request, res = response)=>{
         Producto.countDocuments(query),
          Producto.find(query)
          .skip(desde)
-         .limit(limite).populate('categoria').populate('proveedor')
+         .limit(limite).populate('categoria','nombreCategoria')
     ])
+    
     return res.json({
                  resp
             })
@@ -26,14 +27,23 @@ const productoById = async(req , res = response)=>{
     
     try {
         const {id} = req.params
-        const {estado,...producto} = await Producto.findById(id).populate('categoria').populate('proveedor');
-        if(!estado==false){
+        const existe = await Producto.findById(id);
+        
+        
+        if(existe.estado==false){
             return res.json({
-                msg: 'No se encuentra en la base de datos'
+                msg: `El producto ${id} no se encuentra en la base de datos, ha sido borrado`
             })
         }
+        const {nombreProducto,descripcionProducto,stock,precio,categoria} = await Producto.findById(id);
+        const {nombreCategoria} = await Categoria.findById(categoria);
+        
         return res.json({
-            producto
+            nombreProducto,
+            descripcionProducto,
+            stock,
+            precio,
+            nombreCategoria
         })
     } catch (error) {
         
@@ -46,12 +56,15 @@ const productoActualizar = async(req = request, res = response)=>{
         //VALIDA CREADOR
         const {id} = req.params;
         const {estado,...data} = req.body;
-        if(!estado==false){
+        const existe = await Producto.findById(id);
+        
+        
+        if(existe.estado==false){
             return res.json({
-                msg: 'No se encuentra en la base de datos'
+                msg: `El producto ${id} no se encuentra en la base de datos, ha sido borrado`
             })
         }
-        const producto = await producto.findByIdAndUpdate(id, data,{new: true})
+        const producto = await Producto.findByIdAndUpdate(id, data,{new: true})
 
         res.json(producto)
 

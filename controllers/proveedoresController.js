@@ -17,6 +17,7 @@ const proveedorGet = async(req = request, res = response)=>{
          .limit(limite)
          
     ])
+    
     return res.json({
                  resp
             })
@@ -53,9 +54,10 @@ const proveedorActualizar = async(req = request, res = response)=>{
         //VALIDA CREADOR
         const {id} = req.params;
         const {estado, ...data} = req.body;
-
+        const existe = await Proveedor.findById(id);
         
-        if(estado==false){
+        
+        if(existe.estado==false){
             return res.json({
                 msg: 'El proveedor no se encuentra'
             })

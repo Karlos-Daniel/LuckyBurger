@@ -20,6 +20,11 @@ const productoSchema = Schema({
         default: 0,
         require: true
     },
+    categoria:{
+        type: Schema.Types.ObjectId,
+        ref: 'Categoria',
+        require: true
+    },
     imgProducto: {
         type: String,
     },
@@ -28,21 +33,12 @@ const productoSchema = Schema({
         default: true,
         require:true
     },
-    categoria:{
-        type: Schema.Types.ObjectId,
-        ref: 'Categoria',
-        require: true
-    },
-    proveedor:{
-        type: Schema.Types.ObjectId,
-        ref: 'Proveedor',
-        require: true
-    },
+   
 
-    descripcion:{type: String},
-    disponible:{type: Boolean, default: true}
+   
 }); productoSchema.methods.toJSON = function(){
     const { __v, _id,... producto }=this.toObject();
+    producto.uid = _id
     return producto;
 }
 

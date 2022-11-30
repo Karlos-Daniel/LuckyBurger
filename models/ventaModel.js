@@ -12,6 +12,10 @@ const ventaSchema = Schema({
         default: 0,
         require: true
     },
+    tipoPedido:{
+        type: String,
+        emun: ['domicilio', 'local']
+    },
     fechaVenta: {
         type: Date,
         default: 0,

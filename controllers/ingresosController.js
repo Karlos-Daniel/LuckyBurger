@@ -52,12 +52,15 @@ const ingresoActualizar = async(req = request, res = response)=>{
         //VALIDA CREADOR
         const {id} = req.params;
         const {estado, ...data} = req.body;
+        const existe = await Ingreso.findById(id);
         
-        if(estado==false){
+        
+        if(existe.estado==false){
             return res.json({
                 msg: `El ingreso ${id} no se encuentra en la base de datos, ha sido borrado`
             })
         }
+        
 
         const ingreso = await Ingreso.findByIdAndUpdate(id, data,{new: true})
 
