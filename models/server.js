@@ -6,8 +6,9 @@ const {dbConnection} = require('../database/config');
 const routesCategoria = require('../routes/categorias.routes');
 const routesProveedor = require('../routes/proveedor.routes');
 const routesIngreso = require('../routes/ingreso.routes');
-const rutaPrueba = require('../controllers/pruebasJsonController');
-const routesProducto = require('../controllers/productoController');
+const rutasProducto = require('../routes/productos.routes');
+const rutaPrueba = require('../routes/pruebas.routes')
+
 class server{
     constructor(){
         this.app = express();
@@ -42,8 +43,8 @@ class server{
         this.app.use(routesCategoria);
         this.app.use(routesProveedor);
         this.app.use(routesIngreso);
+        this.app.use(rutasProducto);
         this.app.use(rutaPrueba);
-        this.app.use(routesProducto);
                 
     }
 
