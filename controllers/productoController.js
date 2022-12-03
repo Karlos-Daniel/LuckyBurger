@@ -4,7 +4,7 @@ const {Producto,Categoria} = require('../models');
 //obtener productos - paginado - total - populate
 const productosGet = async(req = request, res = response)=>{
 
-    const {limite = "6",desde} = req.query;
+    const {limite,desde} = req.query;
     const query = {estado: true};
     
 
