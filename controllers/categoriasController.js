@@ -6,9 +6,7 @@ const categoriasGet = async(req = request, res = response)=>{
 
     const {limite,desde} = req.query;
     const query = {estado: true};
-    
-
-
+  
     const resp = await Promise.all([
         
         Categoria.countDocuments(query),
