@@ -4,7 +4,7 @@ const {Proveedor,Usuario} = require('../models');
 //obtener categorias - paginado - total - populate
 const proveedorGet = async(req = request, res = response)=>{
 
-    const {limite = "6",desde} = req.query;
+    const {limite,desde} = req.query;
     const query = {estado: true};
     
 

@@ -123,7 +123,7 @@ const crearProducto = async(req,res = response)=>{
         const producto = new Producto(data);
     
         await producto.save();
-    
+        console.log(producto);
         res.status(201).json(producto);
     } catch (error) {
         console.log(error);

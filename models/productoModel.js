@@ -31,7 +31,7 @@ const productoSchema = Schema({
     estado:{
         type: Boolean,
         default: true,
-        require:true
+        
     },
    
 
