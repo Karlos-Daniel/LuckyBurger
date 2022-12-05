@@ -2,6 +2,11 @@ const {Schema, model} = require('mongoose');
 
 const detalleSchema = Schema({
     
+    producto:{
+        type: Schema.Types.ObjectId,
+        ref: 'Producto',
+        require: true
+    },
     cantidad:{
         type: Number,
         default: 1,
@@ -12,15 +17,10 @@ const detalleSchema = Schema({
         default: 0,
         require: true
     },
-    producto:{
-        type: Schema.Types.ObjectId,
-        ref: 'Producto',
-        require: true
-    },
     adicion:{
         type:Schema.Types.ObjectId,
         ref: 'Producto',
-        default: ''
+        default: '638addcd262090e247739aa1'
     },
     venta:{
         type: Schema.Types.ObjectId,

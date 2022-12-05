@@ -31,7 +31,7 @@ const productoById = async (req, res = response) => {
         const { id } = req.params
         const existe = await Producto.findById(id);
 
-
+        console.log(existe);
         if (existe.estado == false) {
             return res.json({
                 msg: `El producto ${id} no se encuentra en la base de datos, ha sido borrado`
@@ -124,8 +124,8 @@ const crearProducto = async (req, res = response) => {
             });
         }
         if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
-            res.status(400).json({ msg: 'No hay archivos en la peticion.' });
-            return;
+            return res.status(400).json({ msg: 'No hay archivos en la peticion.' });
+            
         }
 
         //Generar data a guardar

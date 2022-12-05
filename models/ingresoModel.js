@@ -13,7 +13,7 @@ const ingresoSchema = Schema({
     },
     descripcionIngreso: {
         type: String,
-        require: true
+        default:""
     },estado:{
         type: Boolean,
         default: true,
