@@ -1,9 +1,11 @@
 const { response } = require("express");
+const { stringify } = require("uuid");
 const { Producto, Detalle, Venta, Ingreso } = require('../models');
 
 const crearPedido = async(req,res=response)=>{
     
-    const pedido = req.body
+    try {
+        const pedido = req.body
     
     const total = pedido.pedido[0].total
     const tipoPedido = pedido.pedido[0].tipoPedido
@@ -47,10 +49,93 @@ const crearPedido = async(req,res=response)=>{
     await Ingreso.findByIdAndUpdate(idIngreso,{descripcionIngreso:textoComa},{new:true})
      
    return res.json({
-    msg: "textosss"
+    msg: "Pedido Ingresado correctamente"
    })
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'algo salio mal en el Backend'
+        })
+    }
+
+    
+}
+
+const obtenerPedidosPruebas = async(req,res=response)=>{
+    
+   let contador = await Ingreso.find({})
+    
+   let idDetalles = await Detalle.find({estado:true})
+   let dataDetalles=[]
+   let detalle;
+   await Promise.all(idDetalles = idDetalles.map(async(element)=>{
+    //console.log(element.adicion);
+    let adiciones = await Producto.findById(element.adicion)
+    detalle = await Detalle.find({}).populate('producto','nombreProducto')
+
+    
+
+    //console.log(adiciones.nombreProducto);
+    
+        let dataDetalless ={
+            //producto:detalle.producto.nombreProducto,
+            cantidad:element.cantidad,
+            adicion:adiciones.nombreProducto
+        }
+        dataDetalles.push(data)
+        
+   }))
+   console.log(dataDetalles);
+   let dataProducto={}
+    detalle=detalle.map(async(element)=>{
+        dataProducto={
+            producto:element.producto.nombreProducto
+        }
+        //console.log(dataProducto);
+    })
+    console.log(dataProducto);
+   //console.log(detalle);
+   //console.log(dataDetalles);
+   
+   //console.log(dataDetalles);
+   let data ={}
+   await Promise.all(contador = contador.map(async(element)=>{
+        
+    //console.log(cantidad);
+
+    data={
+        
+        descripcion: element.descripcionIngreso,
+        fecha: element.fechaIngreso,
+        total: element.totalIngreso
+    }
+    
+}))
+
+    //console.log(contador);
+
+    return res.json({
+        totalVenta:data.total,
+
+    })
+}
+
+const obtenerPedidos = async(req,res=response)=>{
+    let ventas = await Venta.find({})
+    let detalles = await Detalle.find({})
+
+    console.log(ventas);
+    console.log("------------------------");
+    console.log(detalles);
+   
+
+
+    return res.json({
+        msg:'pruebas'
+
+    })
 }
 
 module.exports={
-    crearPedido
+    crearPedido,
+    obtenerPedidos
 }
