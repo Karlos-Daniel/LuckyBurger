@@ -15,6 +15,7 @@ const crearPedido = async(req,res=response)=>{
     }
 
     const venta = new Venta(dataVenta);
+   
     await venta.save()
     const dataIngreso ={
         totalIngreso:total,  
@@ -33,6 +34,7 @@ const crearPedido = async(req,res=response)=>{
     
     pedido.pedido[1].forEach(async(element) => {
         let detalle = new Detalle(element)
+        //console.log(detalle);
         await detalle.save()
     });
     let textoUnido = "";
@@ -40,12 +42,17 @@ const crearPedido = async(req,res=response)=>{
     await Promise.all(pedido.pedido[1]=pedido.pedido[1].map(async(element)=>{
             
         let {nombreProducto} = await Producto.findById(element.producto);
+        let adiciones = await Producto.findById(element.adicion)
         
-        textoUnido +=`${nombreProducto},`
-        //console.log(textoUnido);
+        if(element.adicion){
+            textoUnido +=`${nombreProducto} x ${element.cantidad} con adicion de ${adiciones.nombreProducto},`
+        }else{  
+            textoUnido +=`${nombreProducto} x ${element.cantidad},`
+        }
+        
     }))
     const textoComa = textoUnido.substring(0, textoUnido.length - 1)
-    
+    //console.log(textoComa);
     await Ingreso.findByIdAndUpdate(idIngreso,{descripcionIngreso:textoComa},{new:true})
      
    return res.json({
@@ -120,17 +127,14 @@ const obtenerPedidosPruebas = async(req,res=response)=>{
 }
 
 const obtenerPedidos = async(req,res=response)=>{
-    let ventas = await Venta.find({})
-    let detalles = await Detalle.find({})
-
-    console.log(ventas);
-    console.log("------------------------");
-    console.log(detalles);
+    const ingresos = await Ingreso.find({})
+    console.log(ingresos);
+    
    
 
 
     return res.json({
-        msg:'pruebas'
+        ingresos
 
     })
 }
