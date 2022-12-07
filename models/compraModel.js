@@ -20,19 +20,7 @@ const compraSchema = Schema({
         type: Date,
         require: true
     },
-    proveedor:{
-        type: Schema.Types.ObjectId,
-        ref: 'Proveedor',
-        require: true
-    },
-    producto:{
-        type: Schema.Types.ObjectId,
-        ref: 'Producto',
-        require: true
-    },
-
-
-
+    
 });
 compraSchema.methods.toJSON = function(){
     const { __v, _id,...compra }=this.toObject();

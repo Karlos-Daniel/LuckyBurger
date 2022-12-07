@@ -19,6 +19,11 @@ const ingresoSchema = Schema({
         default: true,
         require:true
     },
+    venta:{
+        type: Schema.Types.ObjectId,
+        ref:'Venta',
+        require: true
+    }
 
     
 

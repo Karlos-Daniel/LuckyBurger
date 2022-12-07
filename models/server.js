@@ -10,7 +10,8 @@ const rutasProducto = require('../routes/productos.routes');
 const rutaPrueba = require('../routes/pruebas.routes')
 const routesUsuario = require('../routes/usuarios.routes');
 const routesLogin = require('../routes/login.routes');
-const routesPedido = require('../routes/pedidos.routes')
+const routesPedido = require('../routes/pedidos.routes');
+const routesCompra = require('../routes/compra.routes');
 
 class server{
     constructor(){
@@ -51,6 +52,7 @@ class server{
         this.app.use(routesUsuario);
         this.app.use(routesLogin);
         this.app.use(routesPedido);
+        this.app.use(routesCompra);
                 
     }
 

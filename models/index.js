@@ -8,6 +8,8 @@ const Ingreso = require('./ingresoModel');
 const Proveedor = require('./proveedorModel');
 const Usuario = require('./usuarioModel');
 const Venta = require('./ventaModel');
+const DetalleCompra = require('./DetalleCompra');
+const Inventario = require('./inventarioModel');
 module.exports = {
     Compra,
     Role,
@@ -18,5 +20,7 @@ module.exports = {
     Proveedor,
     Usuario,
     Venta,
+    DetalleCompra,
+    Inventario,
     Categoria
 }

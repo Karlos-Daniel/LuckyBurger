@@ -11,10 +11,6 @@ const productoSchema = Schema({
         type: String,
         require: true
     },
-    stock:{
-        type: Number,
-        default: 0,
-    },
     precio: {
         type: Number,
         default: 0,
