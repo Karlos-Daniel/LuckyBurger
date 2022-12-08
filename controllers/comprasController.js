@@ -130,11 +130,21 @@ const crearCompra = async(req,res=response)=>{
     
 }
 
+const obtenerCompras = async(req,res=response)=>{
+
+    const resp = await Compra.find({})
+
+
+    return res.json(resp)
+
+}
+
 
 
 module.exports = {
     
-    crearCompra
+    crearCompra,
+    obtenerCompras
 }
 
 

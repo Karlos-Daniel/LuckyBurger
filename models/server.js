@@ -12,6 +12,7 @@ const routesUsuario = require('../routes/usuarios.routes');
 const routesLogin = require('../routes/login.routes');
 const routesPedido = require('../routes/pedidos.routes');
 const routesCompra = require('../routes/compra.routes');
+const routesEgreso = require('../routes/egreso.routes');
 
 class server{
     constructor(){
@@ -53,6 +54,7 @@ class server{
         this.app.use(routesLogin);
         this.app.use(routesPedido);
         this.app.use(routesCompra);
+        this.app.use(routesEgreso);
                 
     }
 
