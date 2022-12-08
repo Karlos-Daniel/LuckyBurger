@@ -5,82 +5,8 @@ const { Proveedor,DetalleCompra,Egreso,Compra,Producto,Inventario } = require('.
 const { findByIdAndUpdate } = require("../models/categoriaModel");
 
 
+
 const crearCompra = async(req,res=response)=>{
-    
-    try {
-        const compra = req.body
-        console.log(compra.compra[0]);
-        const totalCompra = compra.compra[0].totalCompra;
-        const dataCompra = {
-            totalCompra:totalCompra
-        }
-        const compraModel = new Compra(dataCompra)
-        //await compraModel.save()
-
-        const dataEgreso = {
-            totalEgreso:totalCompra
-        }
-        //console.log(compra[1]);
-        const egresoModel = new Egreso(dataEgreso)
-        //await egresoModel.save()
-
-        compra.compra[1]=compra.compra[1].map(async(element)=>{
-            return {...element,compra:compraModel._id}
-        })
-        let textoUnido = "";
-        
-    //mapeo para poder sacar todo lo que se compro y cuanto y si tuvo adicion o no
-    await Promise.all(compra.compra[1]=compra.compra[1].map(async(element)=>{
-            
-        let {nombreProducto} = await Producto.findById(element.producto);
-        //console.log(element.precioCompra);
-         
-        textoUnido +=`${nombreProducto} x ${element.cantidad},`
-
-        let inventario = await Inventario.findById(element.producto)
-
-        if(inventario){
-            let stockOdl = inventario.stock
-            let stockNew = stockOdl+element.cantidad;
-            let dataInventario ={
-                producto: element.producto,
-                stock:stockNew              
-            }
-            await findByIdAndUpdate(dataInventario)
-
-        }else{
-            let dataInventario ={
-                producto: element.producto,
-                stock: element.cantidad
-            }
-            let nuevoInventario = await new Inventario(dataInventario)
-            await nuevoInventario.save()
-        }
-        
-        
-    }))
-
-    console.log(textoUnido);
-    
-
-    //quito la ultima "," del texto
-    const textoComa = textoUnido.substring(0, textoUnido.length - 1)
-    //console.log(textoComa);
-
-        
-       return res.json({
-        msg: "Pruebas"
-       })
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({
-                msg: 'algo salio mal en el Backend'
-            })
-        }
-
-    
-}
-const crearCompra2 = async(req,res=response)=>{
     
     try {
     const compra = req.body
@@ -209,8 +135,8 @@ const crearCompra2 = async(req,res=response)=>{
 }
 
 module.exports = {
-    crearCompra,
-    crearCompra2
+    
+    crearCompra
 }
 
 
