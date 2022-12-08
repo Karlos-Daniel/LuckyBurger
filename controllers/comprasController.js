@@ -102,7 +102,7 @@ const crearCompra2 = async(req,res=response)=>{
     await compraModel.save()
 
     const IdCompra = compraModel._id
-    //console.log(idVenta);
+    
     //Seteo la data de la tabla Ingreso
     const dataEgreso ={
         totalEgreso:totalCompra,  
@@ -125,16 +125,46 @@ const crearCompra2 = async(req,res=response)=>{
     compra.compra[1]=compra.compra[1].map(element=>{
         return {...element,compra:IdCompra}  
     });
-    //console.log(pedido.pedido[1]);
+    let arr = []
+    
+    
     //por cada elemento lo guardo en detalleVentas
-
-    await Promise.all(compra.compra[1].forEach(async(element) => {
+    
+    compra.compra[1].forEach(async(element) => {
         let detalleCompra = new DetalleCompra(element)
         await detalleCompra.save()
+        
         let inventario = await Inventario.find({producto:element.producto})
-
-        console.log(element);
-    }))
+        console.log('ESTO ES EL INVENTARIO');
+        console.log(inventario);
+        if(inventario.length==1){
+            console.log('ENTRA EN EL PRIMERO');
+            console.log(element);
+            let stockSumar = element.cantidad
+            
+            let idProducto = element.producto
+            
+            
+            let stockOld = inventario[0].stock
+            let stockNew = stockOld+stockSumar
+            let idInventarioUpdate = inventario[0]._id
+            
+            await Inventario.findOneAndUpdate({_id:idInventarioUpdate},{stock: stockNew})   
+        }
+        if (inventario.length===0) {
+            console.log('ENTRA EN EL SEGUNDO');
+            
+            let dataInventario ={
+                producto:element.producto,
+                stock: element.cantidad
+            }
+            console.log(dataInventario);
+            let detalleCompra = new Inventario(dataInventario)
+            await detalleCompra.save()
+        }
+        
+    })
+   
     
     let textoUnido = "";
 
@@ -149,9 +179,7 @@ const crearCompra2 = async(req,res=response)=>{
             textoUnido +=`${nombreProducto} x ${element.cantidad} con adicion de ${adiciones.nombreProducto},`
         }else{  
             textoUnido +=`${nombreProducto} x ${element.cantidad},`
-        }
-        
-        
+        }       
     }))
     
 
@@ -163,6 +191,9 @@ const crearCompra2 = async(req,res=response)=>{
      await Egreso.findByIdAndUpdate(idEgreso,{
          descripcionEgreso:textoComa
      },{new:true})
+     await Compra.findByIdAndUpdate(IdCompra,{
+        descripcionCompra:textoComa
+    },{new:true})
      
    return res.json({
     msg: "Compra Ingresado correctamente"

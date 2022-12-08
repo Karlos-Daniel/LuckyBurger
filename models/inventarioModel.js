@@ -3,7 +3,8 @@ const {Schema, model} = require('mongoose');
 const inventarioSchema = Schema({
     producto:{
         type: Schema.Types.ObjectId,
-        ref:'Producto'
+        ref:'Producto',
+        require: true
     },
     stock:{
         type: Number,

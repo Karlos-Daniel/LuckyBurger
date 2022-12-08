@@ -8,7 +8,7 @@ const compraSchema = Schema({
         default: 0,
         require: true,
     },
-    descripcionEgreso: {
+    descripcionCompra: {
         type: String,
         require: true
     },
