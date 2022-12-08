@@ -61,15 +61,12 @@ const crearCompra = async(req,res=response)=>{
         await detalleCompra.save()
         
         let inventario = await Inventario.find({producto:element.producto})
-        console.log('ESTO ES EL INVENTARIO');
-        console.log(inventario);
+        
         if(inventario.length==1){
-            console.log('ENTRA EN EL PRIMERO');
-            console.log(element);
+            
             let stockSumar = element.cantidad
             
             let idProducto = element.producto
-            
             
             let stockOld = inventario[0].stock
             let stockNew = stockOld+stockSumar
@@ -78,8 +75,7 @@ const crearCompra = async(req,res=response)=>{
             await Inventario.findOneAndUpdate({_id:idInventarioUpdate},{stock: stockNew})   
         }
         if (inventario.length===0) {
-            console.log('ENTRA EN EL SEGUNDO');
-            
+                        
             let dataInventario ={
                 producto:element.producto,
                 stock: element.cantidad
@@ -133,6 +129,8 @@ const crearCompra = async(req,res=response)=>{
 
     
 }
+
+
 
 module.exports = {
     

@@ -1,12 +1,30 @@
 const { response } = require("express");
 const { stringify } = require("uuid");
-const { Producto, Detalle, Venta, Ingreso } = require('../models');
+const { Producto, Detalle, Venta, Ingreso, Inventario } = require('../models');
 
 const crearPedido = async(req,res=response)=>{
     
     try {
     const pedido = req.body
-    
+    for (const element of pedido.pedido[1]) {
+           
+        let inventario = await Inventario.find({producto:element.producto})
+        
+        if(inventario.length==1){
+            
+            let stockSumar = element.cantidad
+            
+            let idProducto = element.producto
+            
+            let stockOld = inventario[0].stock
+            let stockNew = stockOld-stockSumar
+            if(stockNew<0){
+                return res.status(400).json({
+                    msg: `No hay suficientes en Inventario ${element.producto}`
+                })      
+            }
+        }
+}
     console.log(pedido);
     //Saco el total del pedido    
     const total = pedido.pedido[0].total
@@ -50,10 +68,30 @@ const crearPedido = async(req,res=response)=>{
     });
     //console.log(pedido.pedido[1]);
     //por cada elemento lo guardo en detalleVentas
-    pedido.pedido[1].forEach(async(element) => {
-        let detalle = new Detalle(element)
-        await detalle.save()
-    });
+    
+
+
+
+
+     pedido.pedido[1].forEach(async(element) => {
+         let detalle = new Detalle(element)
+         await detalle.save()
+         let inventario = await Inventario.find({producto:element.producto})
+        
+         if(inventario.length==1){
+             
+             let stockSumar = element.cantidad
+             
+             let idProducto = element.producto
+             
+             let stockOld = inventario[0].stock
+             let stockNew = stockOld-stockSumar
+
+             let idInventarioUpdate = inventario[0]._id      
+            await Inventario.findOneAndUpdate({_id:idInventarioUpdate},{stock: stockNew})
+         }
+         
+     });
     let textoUnido = "";
 
     //mapeo para poder sacar todo lo que se compro y cuanto y si tuvo adicion o no
@@ -83,6 +121,7 @@ const crearPedido = async(req,res=response)=>{
    return res.json({
     msg: "Pedido Ingresado correctamente"
    })
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({
