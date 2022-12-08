@@ -2,11 +2,7 @@ const {Schema, model} = require('mongoose');
 
 const compraSchema = Schema({
     
-    cantidad:{
-        type: Number,
-        default: 1,
-        require: true,
-    },
+    
     totalCompra: {
         type: Number,
         default: 0,

@@ -1,10 +1,9 @@
 const {Schema, model} = require('mongoose');
 
 const inventarioSchema = Schema({
-    nombreProducto:{
-        type: String,
-        required: [true, 'El nombre es obligatorio'],
-        unique: true
+    producto:{
+        type: Schema.Types.ObjectId,
+        ref:'Producto'
     },
     stock:{
         type: Number,

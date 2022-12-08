@@ -6,7 +6,8 @@ const crearPedido = async(req,res=response)=>{
     
     try {
     const pedido = req.body
-        
+    
+    console.log(pedido);
     //Saco el total del pedido    
     const total = pedido.pedido[0].total
     
@@ -24,7 +25,7 @@ const crearPedido = async(req,res=response)=>{
     await venta.save()
 
     const idVenta = venta._id
-    console.log(idVenta);
+    //console.log(idVenta);
     //Seteo la data de la tabla Ingreso
     const dataIngreso ={
         totalIngreso:total,  
@@ -47,7 +48,7 @@ const crearPedido = async(req,res=response)=>{
     pedido.pedido[1]=pedido.pedido[1].map(element=>{
         return {...element,venta:idVenta}  
     });
-    console.log(pedido.pedido[1]);
+    //console.log(pedido.pedido[1]);
     //por cada elemento lo guardo en detalleVentas
     pedido.pedido[1].forEach(async(element) => {
         let detalle = new Detalle(element)
@@ -59,6 +60,7 @@ const crearPedido = async(req,res=response)=>{
     await Promise.all(pedido.pedido[1]=pedido.pedido[1].map(async(element)=>{
             
         let {nombreProducto} = await Producto.findById(element.producto);
+        console.log(nombreProducto);
         let adiciones = await Producto.findById(element.adicion)
         //console.log(element.adicion);
         if(element.adicion){
