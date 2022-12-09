@@ -1,14 +1,14 @@
 const{ Router }= require('express');
 
 const {check} = require('express-validator');
-const { crearProducto,productoById,productosGet, productoActualizar, borrarProductos } = require('../controllers/productoController');
+const { crearProducto,productoById, productoActualizar, borrarProductos, productosGetProducto, productosGetInventario } = require('../controllers/productoController');
 const {validarCampos,existeCategoriaById,existeProductoById } = require('../middlewares');
 
 const router = Router();
 
 //Obtener todas las Productos - publico
-router.get('/productos',productosGet);//LISTO
-
+router.get('/productos',productosGetProducto);//LISTO
+router.get('/inventario',productosGetInventario);
 
 
 //Obtener una Producto por id - publico

@@ -4,10 +4,10 @@ const cloudinary = require('cloudinary').v2
 cloudinary.config(process.env.CLOUDINARY_URL)
 const { subirArchivo } = require('../helpers/subir-archivo');
 //obtener productos - paginado - total - populate
-const productosGet = async (req = request, res = response) => {
+const productosGetProducto = async (req = request, res = response) => {
 
     const { limite, desde } = req.query;
-    const query = { estado: true };
+    const query = { estado:true,tipoProducto: "Producto" };
 
 
 
@@ -114,7 +114,9 @@ const crearProducto = async (req, res = response) => {
             precio,
             categoria,
             proveedor,
-            descripcionProducto } = req.body;
+            descripcionProducto,
+            tipoProducto
+            } = req.body;
 
         const productoDB = await Producto.findOne({ nombreProducto });
 
@@ -135,6 +137,7 @@ const crearProducto = async (req, res = response) => {
             categoria,
             proveedor,
             descripcionProducto,
+            tipoProducto
             //FALTA IMAGEN
         }
         const producto = new Producto(data);
@@ -159,9 +162,31 @@ const crearProducto = async (req, res = response) => {
 
 }
 
+const productosGetInventario = async (req = request, res = response) => {
+
+    const { limite, desde } = req.query;
+    const query = { estado:true,tipoProducto: "Inventario" };
+
+
+
+    const resp = await Promise.all([
+
+        Producto.countDocuments(query),
+        Producto.find(query)
+            .skip(desde)
+            .limit(limite).populate('categoria', 'nombreCategoria')
+    ])
+
+    return res.json({
+        resp
+    })
+
+}
+
 module.exports = {
     crearProducto,
-    productosGet,
+    productosGetInventario,
+    productosGetProducto,
     productoActualizar,
     borrarProductos,
     productoById

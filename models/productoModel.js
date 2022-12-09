@@ -29,6 +29,10 @@ const productoSchema = Schema({
         default: true,
         
     },
+    tipoProducto:{
+        type: String,
+        emun: ['Producto','Inventario']
+    }
    
 
    
