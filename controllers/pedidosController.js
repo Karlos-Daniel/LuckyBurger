@@ -25,7 +25,7 @@ const crearPedido = async(req,res=response)=>{
             }
         }
 }
-    console.log(pedido);
+    //console.log(pedido);
     //Saco el total del pedido    
     const total = pedido.pedido[0].total
     

@@ -7,7 +7,7 @@ const { subirArchivo } = require('../helpers/subir-archivo');
 const productosGetProducto = async (req = request, res = response) => {
 
     const { limite, desde } = req.query;
-    const query = { estado:true,tipoProducto: "Producto" };
+    const query = { estado:true,tipoProducto: "Venta" };
 
 
 
@@ -94,7 +94,7 @@ const borrarProductos = async (req, res) => {
 
     const { id } = req.params;
     await Promise.all([
-        Producto.findByIdAndUpdate(id, { estado: false }),
+        Producto.findByIdAndDelete(id)
     ])
     return res.json({
         msg: 'borrada con exito'

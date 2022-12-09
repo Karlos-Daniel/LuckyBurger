@@ -30,7 +30,7 @@ const proveedorSchema = Schema({
 });
 proveedorSchema.methods.toJSON = function(){
     const { __v, _id,...proveedor }=this.toObject();
-    proveedor.uid = _id
+    proveedor.uidProveedor = _id
     return proveedor;
 }
 
