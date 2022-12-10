@@ -14,7 +14,7 @@ router.get('/egreso/:id',[
 
 
 
-router.post('/crear/ingreso',[
+router.post('/crear/egreso',[
     check('descripcionEgreso','La descripcion es obligatorio').not().isEmpty(),
     check('totalEgreso','La descripcion es obligatorio').not().isEmpty(),
     validarCampos
@@ -23,7 +23,7 @@ router.post('/crear/ingreso',[
 
 
 
-router.put('/editar/ingreso/:id',[
+router.put('/editar/egreso/:id',[
     check('id','No es un ID valido de MongoDB').isMongoId(),
     check('descripcionEgreso','La descripcion es obligatorio').not().isEmpty(),
     check('totalEgreso','La descripcion es obligatorio').not().isEmpty(),
@@ -33,7 +33,7 @@ router.put('/editar/ingreso/:id',[
 
 
 
-router.delete('/delete/ingreso/:id',[
+router.delete('/delete/egreso/:id',[
     check('id','No es un ID valido de MongoDB').isMongoId(),
     
 ],borrarEgreso)
