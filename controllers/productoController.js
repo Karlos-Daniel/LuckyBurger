@@ -7,7 +7,7 @@ const { subirArchivo } = require('../helpers/subir-archivo');
 const productosGetProducto = async (req = request, res = response) => {
 
     const { limite, desde } = req.query;
-    const query = { estado:true,tipoProducto: "Venta" };
+    const query = { estado:true};
 
 
 
