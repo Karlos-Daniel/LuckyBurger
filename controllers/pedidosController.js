@@ -1,6 +1,7 @@
 const { response } = require("express");
 const { stringify } = require("uuid");
 const { Producto, Detalle, Venta, Ingreso, Inventario } = require('../models');
+const { all } = require("../routes/pedidos.routes");
 
 const crearPedido = async(req,res=response)=>{
     
@@ -133,28 +134,53 @@ const crearPedido = async(req,res=response)=>{
 }
 
 const obtenerPedidos = async(req,res=response)=>{
-    const ingresos = await Ingreso.find({}).populate('venta','tipoPedido')
-    
-    const algo = await Detalle.find({})
-    //ForEach de [algo] para updatear la cantidad de productos en inventario
-    //let {stock} = await Inventario.find({producto:element.producto})
-    //condicional para saber si stock >= element.cantidad, si no se cumple haga un res.json({msg:'la compra supera al stock'})
-    // Inventario.findOneAndUpdate({stock:stock-element.cantidad})
-    
 
+    /*LO QUE ESTABA ANTES
+    // const ingresos = await Ingreso.find({}).populate('venta','tipoPedido')
     
-   
-
+    // const algo = await Detalle.find({})
     
+    FIN DE LO QUE ESTABA ANTES
     return res.json({
         ingresos
         
     })
+    */
+
+    try {
+
+    const query = {venta:'63935d99f4339b755a408f7a'};
+
+
+
+    const resp = await Promise.all([
+
+        Detalle.countDocuments(query),
+        Detalle.find(query)
+    ])
+
+    return res.json({
+        resp
+    })
+        
+    } catch (error) {
+        console.log(error);
+        return res.json(error)
+    }
+   
+
+    
+    
+}
+
+const editarPedido = async(req,res=response)=>{
+
 }
 
 module.exports={
     crearPedido,
-    obtenerPedidos
+    obtenerPedidos,
+    editarPedido
 }
 // const obtenerPedidosPruebas = async(req,res=response)=>{
     
