@@ -20,7 +20,7 @@ const detalleSchema = Schema({
     adicion:{
         type:Schema.Types.ObjectId,
         ref: 'Producto',
-        default: '638d60f1cf8c1c4691c64ea4'
+        default: '63b62602166e1bb0f3c25163'
     },
     venta:{
         type: Schema.Types.ObjectId,

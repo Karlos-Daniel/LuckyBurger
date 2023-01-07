@@ -17,6 +17,10 @@ const ventaSchema = Schema({
         default: Date.now,
         require: true
     },
+    mesa:{
+        type: String,
+        require: true
+    }
     
 
 
