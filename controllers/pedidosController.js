@@ -1,6 +1,7 @@
 const { response } = require("express");
 const { stringify } = require("uuid");
 const { Producto, Detalle, Venta, Ingreso, Inventario } = require("../models");
+const {editarIngreso} = require('../helpers/editarIngreso')
 const { find } = require("../models/categoriaModel");
 const { all } = require("../routes/pedidos.routes");
 
@@ -92,18 +93,13 @@ const crearPedido = async (req, res = response) => {
         });
         let textoUnido = "";
 
-        //mapeo para poder sacar todo lo que se compro y cuanto y si tuvo adicion o no
+        //mapeo para poder sacar todo lo que se compro y cuanto
         await Promise.all(
             (pedido.pedido[1] = pedido.pedido[1].map(async (element) => {
                 let { nombreProducto } = await Producto.findById(element.producto);
-                console.log(nombreProducto);
-                let adiciones = await Producto.findById(element.adicion);
-                //console.log(element.adicion);
-                if (element.adicion) {
-                    textoUnido += `${nombreProducto} x ${element.cantidad} con adicion de ${adiciones.nombreProducto},`;
-                } else {
-                    textoUnido += `${nombreProducto} x ${element.cantidad},`;
-                }
+               
+                textoUnido += `${nombreProducto} x ${element.cantidad},`;
+                
             }))
         );
 
@@ -156,7 +152,6 @@ const obtenerProductosPedido = async (req, res = response) => {
     const { id } = req.params;
     const productos = await Detalle.find({ venta: id })
         .populate("producto", "nombreProducto")
-        .populate("adicion", "nombreProducto");
 
     return res.json(productos);
 };
@@ -182,8 +177,9 @@ const editarProductoPedido = async (req, res = response) => {
         const inventario = await Inventario.find({
             producto: newProducto.producto,
         });
+        
 
-        if (inventario) {
+        if (inventario.length>0) {
             const nuevoStock =
                 inventario[0].stock + (detalle.cantidad - newProducto.cantidad);
             if (nuevoStock < 0) {
@@ -197,6 +193,8 @@ const editarProductoPedido = async (req, res = response) => {
                 { new: true }
             );
         }
+        await editarIngreso(idVenta);
+
         //fin actualizacion inventario
 
         return res.json({
@@ -210,7 +208,7 @@ const editarProductoPedido = async (req, res = response) => {
 
 const agregarProducto = async (req, res = response) => {
     const { id } = req.params;
-    const { producto, cantidad, precioDetalle, adicion } = req.body;
+    const { producto, cantidad, precioDetalle} = req.body;
     const venta = await Venta.findById(id);
     if (!venta) {
         return res.json({
@@ -221,7 +219,6 @@ const agregarProducto = async (req, res = response) => {
         producto: producto,
         cantidad: cantidad,
         precioDetalle: precioDetalle,
-        adicion: adicion,
         venta: id,
     };
     const inventario = await Inventario.find({ producto: producto });
@@ -239,10 +236,11 @@ const agregarProducto = async (req, res = response) => {
             { new: true }
         );
     }
-
+    
     const newProducto = new Detalle(data);
 
     await Detalle.save();
+    await editarIngreso(id)
 
     return res.json({
         msg: "Se creo el nuevo producto en esta venta",
@@ -253,17 +251,18 @@ const editarVenta = async (req, res = response) => {
     const { id } = req.params;
 
     const venta = await Venta.findById(id);
-
+    
     if (!venta) {
         return res.json({
             msg: "No existe la venta en la db",
         });
     }
-
+    
     const data = req.body;
-
+    
     await Venta.findByIdAndUpdate(id, data, { new: true });
-
+    
+    await editarIngreso(id)
     return res.json({
         msg: "Se actualizo la venta correctamente",
     });
@@ -323,59 +322,4 @@ module.exports = {
     obtenerProductosPedido,
     editarProductoPedido,
 };
-// const obtenerPedidosPruebas = async(req,res=response)=>{
-
-//    let contador = await Ingreso.find({})
-
-//    let idDetalles = await Detalle.find({estado:true})
-//    let dataDetalles=[]
-//    let detalle;
-//    await Promise.all(idDetalles = idDetalles.map(async(element)=>{
-//     //console.log(element.adicion);
-//     let adiciones = await Producto.findById(element.adicion)
-//     detalle = await Detalle.find({}).populate('producto','nombreProducto')
-
-//     //console.log(adiciones.nombreProducto);
-
-//         let dataDetalless ={
-//             //producto:detalle.producto.nombreProducto,
-//             cantidad:element.cantidad,
-//             adicion:adiciones.nombreProducto
-//         }
-//         dataDetalles.push(data)
-
-//    }))
-//    console.log(dataDetalles);
-//    let dataProducto={}
-//     detalle=detalle.map(async(element)=>{
-//         dataProducto={
-//             producto:element.producto.nombreProducto
-//         }
-//         //console.log(dataProducto);
-//     })
-//     console.log(dataProducto);
-//    //console.log(detalle);
-//    //console.log(dataDetalles);
-
-//    //console.log(dataDetalles);
-//    let data ={}
-//    await Promise.all(contador = contador.map(async(element)=>{
-
-//     //console.log(cantidad);
-
-//     data={
-
-//         descripcion: element.descripcionIngreso,
-//         fecha: element.fechaIngreso,
-//         total: element.totalIngreso
-//     }
-
-// }))
-
-//     //console.log(contador);
-
-//     return res.json({
-//         totalVenta:data.total,
-
-//     })
-// }
+ 
