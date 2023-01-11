@@ -16,6 +16,17 @@ const categoriasGet = async(req = request, res = response)=>{
          .limit(limite)
          
     ])
+    resp[1] = resp[1].sort((a,b)=>{
+        if (a.nombreCategoria
+            > b.nombreCategoria) {
+            return 1;
+          }
+          if (a.nombreCategoria < b.nombreCategoria) {
+            return -1;
+          }
+          
+          return 0;
+    })
     return res.json({
                  resp
             })
