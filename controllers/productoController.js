@@ -18,7 +18,18 @@ const productosGetProducto = async (req = request, res = response) => {
             .skip(desde)
             .limit(limite).populate('categoria', 'nombreCategoria')
     ])
-
+    resp[1] = resp[1].sort((a,b)=>{
+        if (a.nombreProducto
+            > b.nombreProducto) {
+            return 1;
+          }
+          if (a.nombreProducto < b.nombreProducto) {
+            return -1;
+          }
+          
+          return 0;
+    })
+    //console.log(arrOrdenado);
     return res.json({
         resp
     })
