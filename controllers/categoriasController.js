@@ -1,5 +1,6 @@
 const { response, json } = require("express");
 const {Categoria,Usuario} = require('../models');
+const { exists } = require("../models/categoriaModel");
 
 //obtener categorias - paginado - total - populate
 const categoriasGet = async(req = request, res = response)=>{
@@ -64,6 +65,15 @@ const categoriaActualizar = async(req = request, res = response)=>{
 const borrarCategorias = async(req,res)=>{
 
     const {id} = req.params;
+
+    const existe = await Categoria.findById(id)
+
+    if(!existe){
+        return res.status(400).json({
+            msg:'La categoria no existe en la DB'
+        })
+    }
+
     const categoriaBorrada = await Categoria.findByIdAndUpdate(id,{estado: false},{new: true})
     return res.json({
         msg: 'borrada con exito'

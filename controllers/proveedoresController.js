@@ -62,7 +62,7 @@ const proveedorActualizar = async(req = request, res = response)=>{
                 msg: 'El proveedor no se encuentra'
             })
         }
-        const proveedor = await Proveedor.findByIdAndUpdate(id, data,{new: true})
+        const proveedor = await Proveedor.findByIdAndDelete(id)
 
         return res.json(proveedor)
 

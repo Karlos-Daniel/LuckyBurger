@@ -91,12 +91,17 @@ const usuariosPost = async(req = request, res = response)=>{
 try {
     
     const {id}= req.params;
-       
+     const existe = await Usuario.findById(id)
+     if(!existe){
+        return res.status(400).json({
+            msg:'El usuario no existe en la db'
+        })
+     }  
     //Convertimos el estado del usuario en false
-    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+    const usuario = await Usuario.findByIdAndDelete(id);
 
 
-   res.json({
+  return res.json({
         msg: 'usuario borrado con exito'
    })
 } catch (error) {

@@ -39,7 +39,16 @@ const crearEgreso = async(req,res=response)=>{
 const borrarEgreso = async(req,res)=>{
 
     const {id} = req.params;
-    await Egreso.findByIdAndUpdate(id,{estado: false},{new: true})
+
+    const existe = await Egreso.findById(id);
+
+    if(!existe){
+        return res.status(400).json({
+            msg:'El egreso no existe en la DB'
+        })
+    }
+
+    await Egreso.findByIdAndDelete(id)
     return res.json({
         msg: 'borrada con exito'
     })

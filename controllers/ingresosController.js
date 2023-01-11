@@ -77,7 +77,16 @@ const ingresoActualizar = async(req = request, res = response)=>{
 const borrarIngreso = async(req,res)=>{
 
     const {id} = req.params;
-    await Ingreso.findByIdAndUpdate(id,{estado: false},{new: true})
+
+    const existe = await Ingreso.findById(id);
+
+    if(!existe){
+        return res.status(400).json({
+            msg:'El Ingreso no existe en la DB'
+        })
+    }
+
+    await Ingreso.findByIdAndDelete(id)
     return res.json({
         msg: 'borrada con exito'
     })
