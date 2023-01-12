@@ -73,7 +73,7 @@ const proveedorActualizar = async(req = request, res = response)=>{
                 msg: 'El proveedor no se encuentra'
             })
         }
-        const proveedor = await Proveedor.findByIdAndDelete(id)
+        const proveedor = await Proveedor.findByIdAndUpdate(id,data,{new:true})
 
         return res.json(proveedor)
 
@@ -88,7 +88,7 @@ const proveedorActualizar = async(req = request, res = response)=>{
 const borrarProveedor = async(req,res)=>{
 
     const {id} = req.params;
-    const categoriaBorrada = await Proveedor.findByIdAndUpdate(id,{estado: false},{new: true})
+    const categoriaBorrada = await Proveedor.findByIdAndDelete(id)
     return res.json({
         msg: 'borrada con exito'
     })
