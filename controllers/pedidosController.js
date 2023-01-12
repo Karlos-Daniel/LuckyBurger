@@ -2,8 +2,8 @@ const { response } = require("express");
 const { stringify } = require("uuid");
 const { Producto, Detalle, Venta, Ingreso, Inventario } = require("../models");
 const {editarIngreso} = require('../helpers/editarIngreso')
-const { find } = require("../models/categoriaModel");
-const { all } = require("../routes/pedidos.routes");
+const { find, findByIdAndUpdate } = require("../models/categoriaModel");
+
 
 const crearPedido = async (req, res = response) => {
     try {
@@ -340,6 +340,115 @@ const borrarVenta = async (req, res = response) => {
     }
 };
 
+const editarPedidoCompleto = async(req,res=response)=>{
+    try {
+    const {id} = req.params
+    const pedido = req.body;
+    //console.log(pedido);
+    //Saco el total del pedido
+    const total = pedido.pedido[0].total;
+    
+    const mesa = pedido.pedido[0].mesa;
+
+    //Saco el tipo de pedido
+    const tipoPedido = pedido.pedido[0].tipoPedido;
+
+    //hago la data para la tabla Venta
+    const dataVenta = {
+        totalVenta: total,
+        tipoPedido: tipoPedido,
+        mesa: mesa,
+    };
+    
+    //Genero una nueva fila para la tabla Venta con la informacion de dataVenta
+    const venta = await Venta.findByIdAndUpdate(id,dataVenta,{new:true});
+
+    const idVenta = id;
+    //console.log(idVenta);
+    //Seteo la data de la tabla Ingreso
+    const dataIngreso = {
+        totalIngreso: total,
+    };
+    
+    //Genero la nueva fila para Ingreso
+    const ingreso = await Ingreso.find({venta:id});
+    
+    const idIngreso = ingreso[0]._id
+    
+    const ingresoEdit = await Ingreso.findByIdAndUpdate(idIngreso,dataIngreso,{new:true})
+
+    //Saco el Id de venta y lo declaro como constante
+
+    //Mapeo el pedido para poder añadirle venta: idVenta a cada detalleVenta
+    pedido.pedido[1] = pedido.pedido[1].map((element) => {
+        return { ...element, venta: idVenta };
+    });
+    //console.log(pedido.pedido[1]);
+    //por cada elemento lo guardo en detalleVentas
+    const detallePedido = await Detalle.find({venta:id})
+    
+    pedido.pedido[1].forEach(async (element) => {
+        console.log(element);
+        if(element.uid){
+            await Detalle.findByIdAndUpdate(element.uid,element)
+        }
+        let detalle = new Detalle(element);
+        await detalle.save();
+
+    });
+    let textoUnido = "";
+
+    //mapeo para poder sacar todo lo que se compro y cuanto
+    await Promise.all(
+        (pedido.pedido[1] = pedido.pedido[1].map(async (element) => {
+            let { nombreProducto } = await Producto.findById(element.producto);
+           
+            textoUnido += `${nombreProducto} x ${element.cantidad},`;
+            
+        }))
+    );
+
+    //quito la ultima "," del texto
+    const textoComa = textoUnido.substring(0, textoUnido.length - 1);
+    //console.log(textoComa);
+
+    //Updateo descripcion ingreso que genere antes
+    await Ingreso.findByIdAndUpdate(
+        idIngreso,
+        {
+            totalIngreso: total,
+            descripcionIngreso: textoComa,
+        },
+        { new: true }
+    );
+
+    return res.json({
+        msg: "Pedido actualizado correctamente",
+    });
+
+        
+    } catch (error) {
+        return res.json(error)
+    }
+
+}
+
+const infoPedidosEditar = async(req,res=response)=>{
+    const {id} = req.params
+
+    
+
+    const detalleProductos = await Detalle.find({venta:id}).populate('producto').populate('venta')
+
+    console.log(detalleProductos);
+
+
+    return res.json({
+        tabla:detalleProductos
+    })
+
+}
+
 module.exports = {
     crearPedido,
     obtenerPedidos,
@@ -350,5 +459,8 @@ module.exports = {
     agregarProducto,
     obtenerProductosPedido,
     editarProductoPedido,
+    editarPedidoCompleto,
+    infoPedidosEditar
+
 };
  

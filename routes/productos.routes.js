@@ -1,6 +1,7 @@
 const{ Router }= require('express');
 
 const {check} = require('express-validator');
+const { editarPedidoCompleto, infoPedidosEditar } = require('../controllers/pedidosController');
 const { crearProducto,productoById, productoActualizar, borrarProductos, productosGetProducto, productosGetInventario } = require('../controllers/productoController');
 const {validarCampos,existeCategoriaById,existeProductoById } = require('../middlewares');
 
@@ -10,7 +11,8 @@ const router = Router();
 router.get('/productos',productosGetProducto);//LISTO
 router.get('/inventario',productosGetInventario);
 
-
+router.put('/editarPedidoCompleto/:id',editarPedidoCompleto)
+router.get('/infoTablaEditar/:id',infoPedidosEditar);
 //Obtener una Producto por id - publico
 router.get('/producto/:id',[
     check('id','No es un ID valido de MongoDB').isMongoId(),
@@ -45,6 +47,9 @@ router.delete('/delete/productos/:id',[
     check('id').custom( existeProductoById ),
 ],borrarProductos)
 //VALIDAR ID
+
+
+
 
 
 module.exports = router
