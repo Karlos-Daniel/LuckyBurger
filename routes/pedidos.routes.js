@@ -10,7 +10,9 @@ router.post('/crearPedido',crearPedido);//LISTO
 router.get('/obtenerPedidos',obtenerPedidos);//LISTO
 router.get('/obtenerVentas',obtenerVentas);//LISTO
 
-router.get('/productos/pedido/:id',obtenerProductosPedido);//LISTO
+router.get('/productos/pedido/:id',[
+    check('id','No es un ID valido de MongoDB').isMongoId(),
+],obtenerProductosPedido);//LISTO
 
 //esto va a editar producto en detallesVenta
 router.put('/editar/ProductoPedido/:idProducto/:idVenta',[
