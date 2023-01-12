@@ -248,67 +248,94 @@ const agregarProducto = async (req, res = response) => {
 };
 
 const editarVenta = async (req, res = response) => {
-    const { id } = req.params;
 
-    const venta = await Venta.findById(id);
+    try {
+        const { id } = req.params;
     
-    if (!venta) {
+        const venta = await Venta.findById(id);
+        
+        if (!venta) {
+            return res.json({
+                msg: "No existe la venta en la db",
+            });
+        }
+        
+        const data = req.body;
+        
+        await Venta.findByIdAndUpdate(id, data, { new: true });
+        
+        await editarIngreso(id)
         return res.json({
-            msg: "No existe la venta en la db",
+            msg: "Se actualizo la venta correctamente",
         });
+        
+    } catch (error) {
+        return res.status(500).json({
+            msg:'Se cayo el backend'
+        })
     }
-    
-    const data = req.body;
-    
-    await Venta.findByIdAndUpdate(id, data, { new: true });
-    
-    await editarIngreso(id)
-    return res.json({
-        msg: "Se actualizo la venta correctamente",
-    });
+
+
 };
 
 const borrarProductoPedido = async (req, res = response) => {
-    const { idProducto, idVenta } = req.params;
-    const detalle = await Detalle.findById(idProducto);
-    const venta = await Venta.findById(idVenta);
-    if (!detalle || !venta) {
-        return res.status(400).json({
-            msg: "El producto no existe en esa venta o la venta",
-        });
+
+    try {
+        
+        const { idProducto, idVenta } = req.params;
+        const detalle = await Detalle.findById(idProducto);
+        const venta = await Venta.findById(idVenta);
+        if (!detalle || !venta) {
+            return res.status(400).json({
+                msg: "El producto no existe en esa venta o la venta",
+            });
+        }
+    
+        await Detalle.findByIdAndDelete(idProducto)
+    
+        return res.json({
+            msg:'Se borro producto de la venta correctamente'
+        })
+    } catch (error) {
+        return res.status(500).json({
+            msg:'Se cayo el backend'
+        })
     }
 
-    await Detalle.findByIdAndDelete(idProducto)
-
-    return res.json({
-        msg:'Se borro producto de la venta correctamente'
-    })
 
 };
 
 const borrarVenta = async (req, res = response) => {
-    const { id } = req.params;
 
-    const venta = await Venta.find({ _id: id });
-    if (!venta) {
-        return res.status(400).json({
-            msg: "la venta no existe",
+    try {
+        
+        const { id } = req.params;
+    
+        const venta = await Venta.find({ _id: id });
+        if (!venta) {
+            return res.status(400).json({
+                msg: "la venta no existe",
+            });
+        }
+    
+        await Promise.all([
+            Venta.findByIdAndDelete(id),
+            Ingreso.findOneAndDelete({ venta: id }),
+        ]);
+    
+        const productos = await Detalle.find({ venta: id });
+        productos.forEach(async (e) => {
+            await Detalle.findByIdAndDelete(e._id);
         });
+    
+        return res.json({
+            msg: "Venta borrada con exito",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            msg:'Se cayo el backend'
+        })
     }
-
-    await Promise.all([
-        Venta.findByIdAndDelete(id),
-        Ingreso.findOneAndDelete({ venta: id }),
-    ]);
-
-    const productos = await Detalle.find({ venta: id });
-    productos.forEach(async (e) => {
-        await Detalle.findByIdAndDelete(e._id);
-    });
-
-    return res.json({
-        msg: "Venta borrada con exito",
-    });
 };
 
 module.exports = {
