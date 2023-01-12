@@ -72,24 +72,10 @@ const crearPedido = async (req, res = response) => {
         //por cada elemento lo guardo en detalleVentas
 
         pedido.pedido[1].forEach(async (element) => {
+            console.log(element);
             let detalle = new Detalle(element);
             await detalle.save();
-            let inventario = await Inventario.find({ producto: element.producto });
-
-            if (inventario.length == 1) {
-                let stockSumar = element.cantidad;
-
-                let idProducto = element.producto;
-
-                let stockOld = inventario[0].stock;
-                let stockNew = stockOld - stockSumar;
-
-                let idInventarioUpdate = inventario[0]._id;
-                await Inventario.findOneAndUpdate(
-                    { _id: idInventarioUpdate },
-                    { stock: stockNew }
-                );
-            }
+            
         });
         let textoUnido = "";
 
@@ -149,11 +135,27 @@ const obtenerVentas = async (req, res = response) => {
 };
 
 const obtenerProductosPedido = async (req, res = response) => {
-    const { id } = req.params;
-    const productos = await Detalle.find({ venta: id })
-        .populate("producto", "nombreProducto")
+    try {
+        
+        const { id } = req.params;
 
-    return res.json(productos);
+        const existe = await Venta.findById(id);
+        console.log(existe);
+        if(!existe){
+            return res.status(400).json({
+                msg:'id no se encuentra en la DB'
+            })
+        }
+
+        const productos = await Detalle.find({ venta: id })
+            .populate("producto", "nombreProducto")
+    
+        return res.json(productos);
+    } catch (error) {
+        return res.status(500).json({
+            msg:error
+        })
+    }
 };
 
 const editarProductoPedido = async (req, res = response) => {

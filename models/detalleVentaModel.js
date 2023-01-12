@@ -14,7 +14,6 @@ const detalleSchema = Schema({
     },
     precioDetalle: {
         type: Number,
-        default: 0,
         require: true
     },
     venta:{
