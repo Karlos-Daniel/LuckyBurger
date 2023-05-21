@@ -10,26 +10,21 @@ const login = async(req= request, res= response)=>{
     try {
         const {correo,password} = req.body;
         
-        //Verificar si el email existe
-        const usuario = await Usuario.findOne({correo})
         
-        console.log(usuario.estado);
+        //Verificar si el email existe
+        const usuario = await Usuario.findOne({correo:correo})
+
         if(!usuario){
             return res.status(400).json({
-                msg: 'Correo no se encuentra registrado'
+                msg: 'Correo o contraseña incorrecta'
             })
         }
-        //Si el usuario esta activo
-        if(!usuario.estado){
-            return res.status(400).json({
-                msg: 'Estado : false'
-            })
-        }
+
         //Verificar la contraseña
         const validPassword = bcryptjs.compareSync(password, usuario.password);
         if(!validPassword){
             return res.status(400).json({
-                msg: 'Contraseña incorrecta'
+                msg: 'Contraseña incorrecta o correo incorrecto'
             })
         }
         const token = await generarJWT(correo);
@@ -40,7 +35,6 @@ const login = async(req= request, res= response)=>{
             })
         
     } catch (error) {
-
         console.log(error);
         return res.status(500).json({
             msg: 'Error al logear'
