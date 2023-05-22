@@ -8,12 +8,14 @@ const bcryptjs = require('bcryptjs');
 const login = async(req= request, res= response)=>{
     
     try {
+        //Solicita informacion del body y desestructura correo y password
         const {correo,password} = req.body;
         
         
         //Verificar si el email existe
         const usuario = await Usuario.findOne({correo:correo})
 
+        //Si no encuentra un usuario con ese correo manda error 400
         if(!usuario){
             return res.status(400).json({
                 msg: 'Correo o contraseña incorrecta'
@@ -27,9 +29,11 @@ const login = async(req= request, res= response)=>{
                 msg: 'Contraseña incorrecta o correo incorrecto'
             })
         }
+        //Generamos JsonWebToken
         const token = await generarJWT(correo);
 
-            res.json({
+            //Retornamos el usuario con su token
+            return res.json({
                 usuario,
                 token
             })

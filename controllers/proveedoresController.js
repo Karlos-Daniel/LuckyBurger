@@ -1,5 +1,5 @@
 const { response } = require("express");
-const {Proveedor,Usuario} = require('../models');
+const {Proveedor,Usuario, Producto} = require('../models');
 
 //obtener categorias - paginado - total - populate
 const proveedorGet = async(req = request, res = response)=>{
@@ -88,7 +88,16 @@ const proveedorActualizar = async(req = request, res = response)=>{
 const borrarProveedor = async(req,res)=>{
 
     const {id} = req.params;
-    const categoriaBorrada = await Proveedor.findByIdAndDelete(id)
+
+    const existe = Proveedor.findById(id)
+
+    if(!existe){
+        return res.status(400).json({
+            msg:"El producto con ese id no existe"
+        })
+    }
+
+    await Proveedor.findByIdAndDelete(id)
     return res.json({
         msg: 'borrada con exito'
     })

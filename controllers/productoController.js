@@ -104,6 +104,15 @@ const productoActualizar = async (req = request, res = response) => {
 const borrarProductos = async (req, res) => {
 
     const { id } = req.params;
+
+    const existe = Producto.findById(id)
+
+    if(!existe){
+        return res.status(400).json({
+            msg:"El producto con ese id no existe"
+        })
+    }
+
     await Promise.all([
         Producto.findByIdAndDelete(id)
     ])

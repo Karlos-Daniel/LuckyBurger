@@ -85,7 +85,8 @@ const borrarCategorias = async(req,res)=>{
         })
     }
 
-    const categoriaBorrada = await Categoria.findByIdAndUpdate(id,{estado: false},{new: true})
+    await Categoria.findByIdAndDelete(id)
+    
     return res.json({
         msg: 'borrada con exito'
     })

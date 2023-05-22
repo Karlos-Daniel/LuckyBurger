@@ -22,11 +22,7 @@ const proveedorSchema = Schema({
         type: String,
         require: true
     },
-    estado:{
-        type: Boolean,
-        default: true,
-        require:true
-    },
+
 });
 proveedorSchema.methods.toJSON = function(){
     const { __v, _id,...proveedor }=this.toObject();

@@ -11,10 +11,6 @@ const inventarioSchema = Schema({
         require: true,
         default: 0,
     },
-    estado:{
-        type: Boolean,
-        default: true,
-    },
     
    
 

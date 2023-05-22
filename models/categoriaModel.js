@@ -6,11 +6,6 @@ const categoriaSchema = Schema({
         required: [true, 'El nombre es obligatorio'],
         unique: true
     },
-    estado:{
-        type: Boolean,
-        default: true,
-        require:true
-    },
     descripcion:{
         type: String,
         require: true

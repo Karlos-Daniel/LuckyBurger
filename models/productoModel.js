@@ -24,11 +24,6 @@ const productoSchema = Schema({
     imgProducto: {
         type: String,
     },
-    estado:{
-        type: Boolean,
-        default: true,
-        
-    },
     tipoProducto:{
         type: String,
         emun: ['Producto','Inventario']

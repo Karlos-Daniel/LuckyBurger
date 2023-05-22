@@ -14,10 +14,6 @@ const ingresoSchema = Schema({
     descripcionIngreso: {
         type: String,
         default:""
-    },estado:{
-        type: Boolean,
-        default: true,
-        require:true
     },
     venta:{
         type: Schema.Types.ObjectId,
