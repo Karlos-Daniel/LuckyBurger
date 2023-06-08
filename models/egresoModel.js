@@ -14,11 +14,7 @@ const egresoSchema = Schema({
     descripcionEgreso: {
         type: String,
         require: true
-    },estado:{
-        type: Boolean,
-        default: true,
-        require:true
-    },
+    }
     
 });
 egresoSchema.methods.toJSON = function(){

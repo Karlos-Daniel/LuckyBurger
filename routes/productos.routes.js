@@ -11,7 +11,7 @@ const router = Router();
 router.get('/productos',productosGetProducto);//LISTO
 router.get('/inventario',productosGetInventario);
 
-router.put('/editarPedidoCompleto/:id',editarPedidoCompleto)
+
 router.get('/infoTablaEditar/:id',infoPedidosEditar);
 //Obtener una Producto por id - publico
 router.get('/producto/:id',[

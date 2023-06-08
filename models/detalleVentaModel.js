@@ -7,6 +7,11 @@ const detalleSchema = Schema({
         ref: 'Producto',
         require: true
     },
+    venta:{
+        type: Schema.Types.ObjectId,
+        ref: 'Venta',
+        require: true 
+    },
     cantidad:{
         type: Number,
         default: 1,
@@ -16,10 +21,9 @@ const detalleSchema = Schema({
         type: Number,
         require: true
     },
-    venta:{
-        type: Schema.Types.ObjectId,
-        ref: 'Venta',
-        require: true 
+    descripcion:{
+        type: String,
+        default:"",
     }
 
 

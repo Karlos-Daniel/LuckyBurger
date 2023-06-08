@@ -2,6 +2,9 @@ const { response } = require("express");
 const { stringify } = require("uuid");
 const { Producto, Detalle, Venta, Ingreso, Inventario } = require("../models");
 
+
+
+//PARA HACER: PEDIR TAMBIEN EL TOTAL DE LA VENTA PARA EDITARLO TAMBIEN EN LA TABLA INGRESO
 const editarIngreso = async(idVenta)=>{
 
 

@@ -7,6 +7,11 @@ const compraSchema = Schema({
         ref: 'Producto',
         require: true
     },
+    proveedor:{
+        type:Schema.Types.ObjectId,
+        ref: 'Proveedor',
+        default: '638d60f1cf8c1c4691c64ea4'
+    },
     cantidad:{
         type: Number,
         default: 1,
@@ -16,11 +21,6 @@ const compraSchema = Schema({
         type: Number,
         default: 0,
         require: true
-    },
-    proveedor:{
-        type:Schema.Types.ObjectId,
-        ref: 'Proveedor',
-        default: '638d60f1cf8c1c4691c64ea4'
     },
     compra:{
         type: Schema.Types.ObjectId,

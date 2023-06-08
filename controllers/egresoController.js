@@ -2,7 +2,6 @@ const { response, json } = require("express");
 const {Egreso} = require('../models');
 
 
-
 const egresoGet = async(req = request, res = response)=>{
 
     const {limite,desde} = req.query;
