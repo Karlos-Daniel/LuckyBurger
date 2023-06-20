@@ -21,14 +21,9 @@ const productoSchema = Schema({
         ref: 'Categoria',
         require: true
     },
-    imgProducto: {
-        type: String,
-    },
-    tipoProducto:{
-        type: String,
-        emun: ['Producto','Inventario']
-    }
-   
+    // imgProducto: {
+    //     type: String,
+    // },  
 
    
 }); productoSchema.methods.toJSON = function(){

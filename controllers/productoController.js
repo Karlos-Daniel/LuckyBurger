@@ -40,19 +40,17 @@ const productoById = async (req, res = response) => {
 
     try {
         const { id } = req.params
-        const existe = await Producto.findById(id);
+        const { nombreProducto, descripcionProducto, precio, categoria } = await Producto.findById(id);
 
-        console.log(existe);
-        if (existe.estado == false) {
+        if (!nombreProducto ||!descripcionProducto || !categoria || !precio) {
             return res.json({
                 msg: `El producto ${id} no se encuentra en la base de datos, ha sido borrado`
             })
         }
 
-        const { nombreProducto, descripcionProducto, stock, precio, categoria } = await Producto.findById(id);
         const { nombreCategoria } = await Categoria.findById(categoria);
 
-        return res.json({
+        return res.status(200).json({
             nombreProducto,
             descripcionProducto,
             stock,
@@ -60,7 +58,8 @@ const productoById = async (req, res = response) => {
             nombreCategoria
         })
     } catch (error) {
-
+        console.log(error);
+        return res.status(500)
     }
 
 }
@@ -69,29 +68,43 @@ const productoActualizar = async (req = request, res = response) => {
     try {
         //VALIDA CREADOR
         const { id } = req.params;
-        const { estado, ...data } = req.body;
-        const producto = await Producto.findById(id);
-        if (req.files) {
-            const nombreArr = producto.imgProducto.split('/');
-            const nombre = nombreArr[nombreArr.length - 1]
-            const [public_id] = nombre.split('.')
-            console.log(public_id);
-            await cloudinary.uploader.destroy(public_id);
-            const {tempFilePath} = req.files.archivo
-            const {secure_url} = await cloudinary.uploader.upload(tempFilePath)
+        const {nombreProducto,
+            precio,
+            categoria,
+            proveedor,
+            descripcionProducto,
+            } = req.body;
+        const productoDB = await Producto.findById(id);
+        if (productoDB) {
+            return res.status(400).json({
+                msg: `La producto ${productoDB} ya existe`
+            });
+        }
+        // if (req.files) {
+        //     const nombreArr = producto.imgProducto.split('/');
+        //     const nombre = nombreArr[nombreArr.length - 1]
+        //     const [public_id] = nombre.split('.')
+        //     console.log(public_id);
+        //     await cloudinary.uploader.destroy(public_id);
+        //     const {tempFilePath} = req.files.archivo
+        //     const {secure_url} = await cloudinary.uploader.upload(tempFilePath)
 
-            producto.imgProducto=secure_url
-            await producto.save()
+        //     producto.imgProducto=secure_url
+        //     await producto.save()
+        // }
+
+        const data = {
+            nombreProducto,
+            precio,
+            categoria,
+            proveedor,
+            descripcionProducto,
+            //FALTA IMAGEN
         }
 
-        if (producto.estado == false) {
-            return res.json({
-                msg: `El producto ${id} no se encuentra en la base de datos, ha sido borrado`
-            })
-        }
-        const productoUpdate = await Producto.findByIdAndUpdate(id, data, { new: true })
+       const productoUpdate = await Producto.findByIdAndUpdate(id, data, { new: true })
 
-        res.json(productoUpdate)
+        return res.status(200).json(productoUpdate)
 
     } catch (error) {
         console.log(error);
@@ -130,12 +143,11 @@ const crearProducto = async (req, res = response) => {
     try {
         //******GUARDAR IMAGEN DEL PRODUCTO CON Req.file.archivo***** */
 
-        const { nombreProducto,
+        const {nombreProducto,
             precio,
             categoria,
             proveedor,
             descripcionProducto,
-            tipoProducto
             } = req.body;
 
         const productoDB = await Producto.findOne({ nombreProducto });
@@ -145,10 +157,10 @@ const crearProducto = async (req, res = response) => {
                 msg: `La producto ${productoDB} ya existe`
             });
         }
-        if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
-            return res.status(400).json({ msg: 'No hay archivos en la peticion.' });
+        // if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
+        //     return res.status(400).json({ msg: 'No hay archivos en la peticion.' });
             
-        }
+        // }
 
         //Generar data a guardar
         const data = {
@@ -157,25 +169,24 @@ const crearProducto = async (req, res = response) => {
             categoria,
             proveedor,
             descripcionProducto,
-            tipoProducto
             //FALTA IMAGEN
         }
         const producto = new Producto(data);
 
-        await producto.save();
-        const { tempFilePath } = req.files.archivo
-        const { secure_url } = await cloudinary.uploader.upload(tempFilePath)
+        // await producto.save();
+        // const { tempFilePath } = req.files.archivo
+        // const { secure_url } = await cloudinary.uploader.upload(tempFilePath)
 
-        producto.imgProducto = secure_url
+        // producto.imgProducto = secure_url
+        
         await producto.save()
-
 
 
 
         res.status(201).json(producto);
     } catch (error) {
         console.log(error);
-        res.status(500)
+        return res.status(500)
 
     }
 
