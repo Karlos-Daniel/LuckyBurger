@@ -7,86 +7,9 @@ const { find, findByIdAndUpdate } = require("../models/categoriaModel");
 
 const crearPedido = async (req, res = response) => {
     try {
-        const pedido = req.body;
-        
-        //console.log(pedido);
-        //Saco el total del pedido
-        const total = pedido.pedido[0].total;
+        const {pedido,mesa,tipoPedido,totalPedido} = req.body;
 
-        //Saco la mesa
-        const mesa = pedido.pedido[0].mesa;
 
-        //Saco el tipo de pedido
-        const tipoPedido = pedido.pedido[0].tipoPedido;
-
-        //hago la data para la tabla Venta
-        const dataVenta = {
-            totalVenta: total,
-            tipoPedido: tipoPedido,
-            mesa: mesa,
-        };
-        //Genero una nueva fila para la tabla Venta con la informacion de dataVenta
-        const venta = new Venta(dataVenta);
-        //Lo guardo en la DB
-        await venta.save();
-
-        const idVenta = venta._id;
-        //console.log(idVenta);
-
-        //Seteo la data de la tabla Ingreso
-        const dataIngreso = {
-            totalIngreso: total,
-            venta: idVenta,
-        };
-
-        //Genero la nueva fila para Ingreso
-        const ingreso = new Ingreso(dataIngreso);
-        //Guardo en la DB
-        await ingreso.save();
-
-        //Saco el Id del ingreso y lo declaro como constante
-
-        const idIngreso = ingreso._id;
-
-        //Saco el Id de venta y lo declaro como constante
-
-        //Mapeo el pedido para poder añadirle venta: idVenta a cada detalleVenta
-        pedido.pedido[1] = pedido.pedido[1].map((element) => {
-            return { ...element, venta: idVenta };
-        });
-        //console.log(pedido.pedido[1]);
-        //por cada elemento lo guardo en detalleVentas
-
-        pedido.pedido[1].forEach(async (element) => {
-            //console.log(element);
-            let detalle = new Detalle(element);
-            await detalle.save();
-            
-        });
-        let textoUnido = "";
-
-        //mapeo para poder sacar todo lo que se compro y cuanto
-        await Promise.all(
-            (pedido.pedido[1] = pedido.pedido[1].map(async (element) => {
-                let { nombreProducto } = await Producto.findById(element.producto);
-               
-                textoUnido += `${nombreProducto} x ${element.cantidad},`;
-                
-            }))
-        );
-
-        //quito la ultima "," del texto
-        const textoComa = textoUnido.substring(0, textoUnido.length - 1);
-        //console.log(textoComa);
-
-        //Updateo descripcion ingreso que genere antes
-        await Ingreso.findByIdAndUpdate(
-            idIngreso,
-            {
-                descripcionIngreso: textoComa,
-            },
-            { new: true }
-        );
 
         return res.json({
             msg: "Pedido Ingresado correctamente",

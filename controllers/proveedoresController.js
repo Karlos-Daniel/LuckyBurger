@@ -7,8 +7,6 @@ const proveedorGet = async(req = request, res = response)=>{
     const {limite,desde} = req.query;
     const query = {estado: true};
     
-
-
     const resp = await Promise.all([
         
         Proveedor.countDocuments(query),
