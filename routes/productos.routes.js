@@ -2,7 +2,7 @@ const{ Router }= require('express');
 
 const {check} = require('express-validator');
 const { editarPedidoCompleto, infoPedidosEditar } = require('../controllers/pedidosController');
-const { crearProducto,productoById, productoActualizar, borrarProductos, productosGetProducto, productosGetInventario } = require('../controllers/productoController');
+const { crearProducto,productoById, productoActualizar, borrarProductos, productosGetProducto, productosGetInventario,productosByAdiciones } = require('../controllers/productoController');
 const {validarCampos,existeCategoriaById,existeProductoById } = require('../middlewares');
 
 const router = Router();
@@ -47,6 +47,7 @@ router.delete('/delete/productos/:id',[
     check('id').custom( existeProductoById ),
 ],borrarProductos)
 //VALIDAR ID
+router.get('/adiciones',productosByAdiciones)
 
 
 

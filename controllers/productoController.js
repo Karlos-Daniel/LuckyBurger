@@ -74,6 +74,7 @@ const productoActualizar = async (req = request, res = response) => {
             proveedor,
             descripcionProducto,
             } = req.body;
+        
         const productoDB = await Producto.findById(id);
         if (productoDB) {
             return res.status(400).json({
@@ -134,9 +135,6 @@ const borrarProductos = async (req, res) => {
     })
 
 }
-
-
-
 
 const crearProducto = async (req, res = response) => {
 
@@ -214,11 +212,20 @@ const productosGetInventario = async (req = request, res = response) => {
 
 }
 
+const productosByAdiciones = async (req = request, res = response) => {
+    const adiciones = await Producto.find({categoria:"6495f7655b1fb21efd4132be"})
+
+    const filtrado = adiciones.filter(e=>!(e.nombreProducto=="SIN ADICION"))
+    
+    return res.json(filtrado)
+}
+
 module.exports = {
     crearProducto,
     productosGetInventario,
     productosGetProducto,
     productoActualizar,
     borrarProductos,
+    productosByAdiciones,
     productoById
 }
