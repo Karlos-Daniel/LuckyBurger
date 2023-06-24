@@ -26,10 +26,10 @@ const productosGetProducto = async (req = request, res = response) => {
           if (a.nombreProducto < b.nombreProducto) {
             return -1;
           }
-          
           return 0;
-    })
-    //console.log(arrOrdenado);
+        })
+    resp[1]=resp[1].filter(e => !(e.categoria.nombreCategoria == "ADICIONES"));
+        console.log(resp[1]);
     return res.json({
         resp
     })
@@ -215,9 +215,7 @@ const productosGetInventario = async (req = request, res = response) => {
 const productosByAdiciones = async (req = request, res = response) => {
     const adiciones = await Producto.find({categoria:"6495f7655b1fb21efd4132be"})
 
-    const filtrado = adiciones.filter(e=>!(e.nombreProducto=="SIN ADICION"))
-    
-    return res.json(filtrado)
+    return res.json(adiciones)
 }
 
 module.exports = {
