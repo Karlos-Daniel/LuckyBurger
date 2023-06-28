@@ -8,7 +8,7 @@ const { find, findByIdAndUpdate } = require("../models/categoriaModel");
 const crearPedido = async (req, res = response) => {
     try {
         const { pedido } = req.body;
-
+        console.log(pedido);
         // Sacamos datos para venta
         const totalVenta = pedido[0].totalpedido
         const tipoPedido = pedido[0].tipoPedido
@@ -34,6 +34,7 @@ const crearPedido = async (req, res = response) => {
         let descripcionVenta = ""; // Inicializamos la variable fuera del bucle
 
         await Promise.all(pedido.map(async (e) => {
+
             let { nombreProducto } = await Producto.findById(e.producto);
             descripcionVenta += `| ${nombreProducto} x ${e.cantidad} |`;
             let descripcionFinal = "";
@@ -54,7 +55,7 @@ const crearPedido = async (req, res = response) => {
                     }
                 }
             }
-            console.log(descripcionFinal);
+            //console.log(descripcionFinal);
 
             let detalleVenta = {
                 venta: idVenta,
