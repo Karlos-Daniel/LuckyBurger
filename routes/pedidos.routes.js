@@ -1,5 +1,5 @@
 const{ Router }= require('express');
-const {crearPedido, obtenerPedidos, editarProductoPedido, obtenerVentas, borrarProductoPedido, editarVenta, borrarVenta, agregarProducto, obtenerProductosPedido, editarPedido}=require('../controllers/pedidosController');
+const {crearPedido, obtenerPedidos, editarProductoPedido, obtenerVentas, borrarProductoPedido, editarVenta, borrarVenta, agregarProducto, obtenerProductosPedido, editarPedido, borrarPedido}=require('../controllers/pedidosController');
 const {check} = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 
@@ -9,7 +9,7 @@ router.post('/crearPedido',crearPedido);//LISTO
 
 router.put('/editarPedido/:idVenta',editarPedido);//LISTO
 
-router.delete('/borrarPedido/:idVenta',)
+router.delete('/borrarPedido/:idVenta',borrarPedido);
 
 router.get('/obtenerPedidos',obtenerPedidos);//LISTO
 router.get('/obtenerVentas',obtenerVentas);//LISTO

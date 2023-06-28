@@ -186,8 +186,34 @@ const editarPedido = async (req, res = response) => {
     }
 };
 
+const borrarPedido = async (req, res = response) => {
+
+    try {
+        
+        const {idVenta} = req.params
+    
+        const old = await Promise.all([
+            Detalle.find({venta:idVenta}),
+            Ingreso.findOneAndDelete({venta:idVenta}),
+            Venta.findByIdAndDelete(idVenta)
+        ])
+        old[0].forEach(async(e)=>{
+            await Detalle.findByIdAndDelete(e._id)
+        })
+        return res.status(200).json({
+            msg:'Pedido borrado correctamente'
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg:error
+        })
+    }
 
 
+
+}
+ 
 
 
 const obtenerPedidos = async (req, res = response) => {
@@ -311,6 +337,7 @@ module.exports = {
     obtenerVentas,
     obtenerProductosPedido,
     infoPedidosEditar,
+    borrarPedido,
     editarPedido
 
 };
