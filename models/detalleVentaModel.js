@@ -2,15 +2,15 @@ const {Schema, model} = require('mongoose');
 
 const detalleSchema = Schema({
     
-    producto:{
-        type: Schema.Types.ObjectId,
-        ref: 'Producto',
-        require: true
-    },
     venta:{
         type: Schema.Types.ObjectId,
         ref: 'Venta',
         require: true 
+    },
+    producto:{
+        type: Schema.Types.ObjectId,
+        ref: 'Producto',
+        require: true
     },
     cantidad:{
         type: Number,
