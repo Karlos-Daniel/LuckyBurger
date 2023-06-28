@@ -35,6 +35,39 @@ const productosGetProducto = async (req = request, res = response) => {
     })
 
 }
+
+const productosGetTodosProducto = async (req = request, res = response) => {
+
+    const { limite, desde } = req.query;
+    const query = { estado:true};
+
+
+
+    const resp = await Promise.all([
+
+        Producto.countDocuments(query),
+        Producto.find(query)
+            .skip(desde)
+            .limit(limite).populate('categoria', 'nombreCategoria')
+    ])
+    resp[1] = resp[1].sort((a,b)=>{
+        if (a.nombreProducto
+            > b.nombreProducto) {
+            return 1;
+          }
+          if (a.nombreProducto < b.nombreProducto) {
+            return -1;
+          }
+          return 0;
+        })
+        resp[1]=resp[1].filter(e => !(e.nombreProducto == "SIN ADICION"));
+        console.log(resp[1]);
+    return res.json({
+        resp
+    })
+
+}
+
 //obtener producto populate { }
 const productoById = async (req, res = response) => {
 
@@ -225,5 +258,6 @@ module.exports = {
     productoActualizar,
     borrarProductos,
     productosByAdiciones,
+    productosGetTodosProducto,
     productoById
 }

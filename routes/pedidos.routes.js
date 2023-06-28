@@ -12,6 +12,7 @@ router.put('/editarPedido/:idVenta',editarPedido);//LISTO
 router.delete('/borrarPedido/:idVenta',borrarPedido);
 
 router.get('/obtenerPedidos',obtenerPedidos);//LISTO
+
 router.get('/obtenerVentas',obtenerVentas);//LISTO
 
 router.get('/productos/pedido/:id',[
