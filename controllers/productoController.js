@@ -109,9 +109,9 @@ const productoActualizar = async (req = request, res = response) => {
             } = req.body;
         
         const productoDB = await Producto.findById(id);
-        if (productoDB) {
+        if (!productoDB) {
             return res.status(400).json({
-                msg: `La producto ${productoDB} ya existe`
+                msg: `La producto ${productoDB} no existe`
             });
         }
         // if (req.files) {
