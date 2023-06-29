@@ -94,16 +94,16 @@ const crearPedido = async (req, res = response) => {
 const editarPedido = async (req, res = response) => {
     try {
         const { pedido } = req.body;
-        const {idVenta} =req.params
+        const { idVenta } = req.params
         const old = await Promise.all([
-            Detalle.find({venta:idVenta}),
-            Ingreso.findOne({venta:idVenta})
+            Detalle.find({ venta: idVenta }),
+            Ingreso.findOne({ venta: idVenta })
         ])
         await Ingreso.findByIdAndDelete(old[1]._id)
-        old[0].forEach(async(e)=>{
+        old[0].forEach(async (e) => {
             await Detalle.findByIdAndDelete(e._id)
         })
-    
+
 
         // Sacamos datos para venta
         const totalVenta = pedido[0].totalpedido
@@ -117,7 +117,7 @@ const editarPedido = async (req, res = response) => {
             mesa
         }
 
-        await Venta.findByIdAndUpdate(idVenta,dataVenta,{new: true})
+        await Venta.findByIdAndUpdate(idVenta, dataVenta, { new: true })
 
 
 
@@ -190,31 +190,69 @@ const editarPedido = async (req, res = response) => {
 const borrarPedido = async (req, res = response) => {
 
     try {
-        
-        const {idVenta} = req.params
-    
+
+        const { idVenta } = req.params
+
         const old = await Promise.all([
-            Detalle.find({venta:idVenta}),
-            Ingreso.findOneAndDelete({venta:idVenta}),
+            Detalle.find({ venta: idVenta }),
+            Ingreso.findOneAndDelete({ venta: idVenta }),
             Venta.findByIdAndDelete(idVenta)
         ])
-        old[0].forEach(async(e)=>{
+        old[0].forEach(async (e) => {
             await Detalle.findByIdAndDelete(e._id)
         })
         return res.status(200).json({
-            msg:'Pedido borrado correctamente'
+            msg: 'Pedido borrado correctamente'
         })
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            msg:error
+            msg: error
         })
     }
 
 
 
 }
- 
+const obtenerProductosPedido = async (req, res = response) => {
+    try {
+
+        const { id } = req.params;
+
+        const existe = await Venta.findById(id);
+        //console.log(existe);
+        if (!existe) {
+            return res.status(400).json({
+                msg: 'id no se encuentra en la DB'
+            })
+        }
+
+        const productos = await Detalle.find({ venta: id })
+            .populate("producto", "nombreProducto")
+        
+        let datosConvertidos = productos.map(function (item) {
+            let descripcionArray = item.descripcion.split(" y ");
+            let adicionesArray = descripcionArray.length > 1 ? descripcionArray[1].split(", ") : [];
+
+            return {
+                venta: item.venta,
+                producto: item.producto,
+                cantidad: item.cantidad,
+                precioDetalle: item.precioDetalle,
+                descripcion: descripcionArray[0].split(", "),
+                adiciones: adicionesArray,
+            };
+        });
+        console.log(datosConvertidos);
+
+        return res.json(datosConvertidos);
+    } catch (error) {
+        return res.status(500).json({
+            msg: error
+        })
+    }
+};
+
 
 
 const obtenerPedidos = async (req, res = response) => {
@@ -238,29 +276,6 @@ const obtenerVentas = async (req, res = response) => {
     }
 };
 
-const obtenerProductosPedido = async (req, res = response) => {
-    try {
-
-        const { id } = req.params;
-
-        const existe = await Venta.findById(id);
-        console.log(existe);
-        if (!existe) {
-            return res.status(400).json({
-                msg: 'id no se encuentra en la DB'
-            })
-        }
-
-        const productos = await Detalle.find({ venta: id })
-            .populate("producto", "nombreProducto")
-
-        return res.json(productos);
-    } catch (error) {
-        return res.status(500).json({
-            msg: error
-        })
-    }
-};
 
 const infoPedidosEditar = async (req, res = response) => {
     const { id } = req.params
@@ -268,7 +283,7 @@ const infoPedidosEditar = async (req, res = response) => {
 
     const detalleProductos = await Detalle.find({ venta: id }).populate('producto').populate('venta')
 
-    console.log(detalleProductos);
+    //console.log(detalleProductos);
 
 
     return res.json({
