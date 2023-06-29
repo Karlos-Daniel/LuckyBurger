@@ -84,7 +84,6 @@ const InventarioActualizar = async(req = request, res = response)=>{
     }
  }
 
-
 //borrarCategorias - estado: false
 const borrarInventario = async(req,res)=>{
 

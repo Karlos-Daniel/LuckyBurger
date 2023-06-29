@@ -94,7 +94,8 @@ const crearPedido = async (req, res = response) => {
 const editarPedido = async (req, res = response) => {
     try {
         const { pedido } = req.body;
-        const { idVenta } = req.params
+        const { idVenta } = req.params;
+        console.log(pedido);
         const old = await Promise.all([
             Detalle.find({ venta: idVenta }),
             Ingreso.findOne({ venta: idVenta })
