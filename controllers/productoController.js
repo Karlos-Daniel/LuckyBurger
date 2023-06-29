@@ -107,7 +107,8 @@ const productoActualizar = async (req = request, res = response) => {
             proveedor,
             descripcionProducto,
             } = req.body;
-        
+        const body = req.body;
+        console.log(body);
         const productoDB = await Producto.findById(id);
         if (!productoDB) {
             return res.status(400).json({
