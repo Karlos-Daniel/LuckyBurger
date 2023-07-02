@@ -48,7 +48,7 @@ const socketController = (socket)=>{
 
         socket.on("cantidadVecesAbierta",()=>{
             
-            socket.emit("CantidadHoy",cantidadDeVecesAbierta)
+            socket.emit("VecesAbierta",cantidadDeVecesAbierta)
 
         })
       
