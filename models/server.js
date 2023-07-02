@@ -13,12 +13,20 @@ const routesLogin = require('../routes/login.routes');
 const routesPedido = require('../routes/pedidos.routes');
 const routesCompra = require('../routes/compra.routes');
 const routesEgreso = require('../routes/egreso.routes');
+const {socketController} = require('../controllers/socketController')
+
+const socketIO = require("socket.io");
 
 class server{
     constructor(){
         this.app = express();
         this.port = process.env.PORT;
-        
+        this.server = require('http').createServer(this.app);
+        this.io = socketIO(this.server,{
+            cors: {
+                origin: "*",
+              },
+        })
         //DB
         this.conectarDB();
 
@@ -27,6 +35,8 @@ class server{
                 
         //Rutas de mi aplicacion
         this.routes();
+
+        this.sockets();
     }
 
     async conectarDB(){
@@ -41,6 +51,10 @@ class server{
             useTempFiles : true,
             tempFileDir : '/tmp/'
         }));
+    }
+
+    sockets(){
+        this.io.on('connection',socketController)
     }
 
     routes(){
