@@ -4,9 +4,12 @@ const { response, json } = require("express");
 const cajaAbierta = async(req, res=response)=>{
 
     try {
-        const {status} =  req.body
+        const {status} =  req.params
+        const body = req.body
         console.log('status');
         console.log(status);
+        console.log('Body');
+        console.log(body);
         const dia = new Date().getDate();
         const mes = new Date().getMonth();
         const year = new Date().getFullYear();

@@ -5,7 +5,7 @@ const {cajaAbierta,cantidadVecesAbiertaHoy} = require('../controllers/cajaContro
 const router = Router();
 
 
-router.post('/status',cajaAbierta)
+router.post('/status/:status',cajaAbierta)
 
 router.get('/infoCaja',cantidadVecesAbiertaHoy)
 
