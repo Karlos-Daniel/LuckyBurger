@@ -13,7 +13,7 @@ const cajaAbierta = async(req, res=response)=>{
         const infoCaja = await Caja.findOne({fechaCaja:fechaActual})
         console.log(infoCaja);
     
-        if(status===1){
+        if(status==1 || status =='1' || status===1 || status==='1'){
             if(!infoCaja) {
                 const cajaData ={
                     fechaCaja:fechaActual,
