@@ -112,6 +112,11 @@ const cantidadVecesAbiertaHoy = async(req, res=response)=>{
     
 }
 
+const cambiarContraCaja = async(req,res=response)=>{
+    const {c1,c2,c3,c4} = req.body
+    
+}
+
 module.exports = {
     cajaAbierta,
     tiempoAbierta,

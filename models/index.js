@@ -11,6 +11,7 @@ const Venta = require('./ventaModel');
 const DetalleCompra = require('./DetalleCompra');
 const Inventario = require('./inventarioModel');
 const Caja = require('./cajaModel');
+const ContraCaja = require('./contraCajaModel')
 module.exports = {
     Compra,
     Role,
@@ -24,5 +25,6 @@ module.exports = {
     DetalleCompra,
     Inventario,
     Caja,
+    ContraCaja,
     Categoria
 }
