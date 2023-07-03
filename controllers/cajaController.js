@@ -40,7 +40,7 @@ const cajaAbierta = async(req, res=response)=>{
                 })
             }
         }else{
-            await Caja.findByIdAndUpdate(infoCaja._id,{status:0},{new:true})
+            await Caja.findByIdAndUpdate(infoCaja._id,{status:0,muchoTiempo:false},{new:true})
             return res.status(200).json({
                 msg:'Caja cerrada'
             })
