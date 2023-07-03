@@ -5,6 +5,8 @@ const cajaAbierta = async(req, res=response)=>{
 
     try {
         const {status} =  req.body
+        console.log('status');
+        console.log(status);
         const dia = new Date().getDate();
         const mes = new Date().getMonth();
         const year = new Date().getFullYear();
@@ -20,7 +22,6 @@ const cajaAbierta = async(req, res=response)=>{
                     vecesAbierta:1,
                     status:1
                 }
-
                 const cajaNueva = new Caja(cajaData)
                 await cajaNueva.save();
                 return res.status(200).json({
