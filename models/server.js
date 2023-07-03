@@ -13,6 +13,7 @@ const routesLogin = require('../routes/login.routes');
 const routesPedido = require('../routes/pedidos.routes');
 const routesCompra = require('../routes/compra.routes');
 const routesEgreso = require('../routes/egreso.routes');
+const routesCaja = require('../routes/caja.routes');
 const {socketController} = require('../controllers/socketController')
 
 const socketIO = require("socket.io");
@@ -69,6 +70,7 @@ class server{
         this.app.use(routesPedido);
         this.app.use(routesCompra);
         this.app.use(routesEgreso);
+        this.app.use(routesCaja)
                 
     }
 

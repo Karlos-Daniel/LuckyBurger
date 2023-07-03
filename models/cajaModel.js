@@ -10,6 +10,10 @@ const cajaSchema = Schema({
         type: Number,
         require: true,
     },
+    status:{
+        type:Boolean,
+        require: true
+    }
     
 });
 

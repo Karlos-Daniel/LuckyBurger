@@ -14,8 +14,9 @@ const fechaHoy = ()=>{
 const cantidadDeVecesAbierta = async() => {
     const fechaActual = fechaActual()
     const infoCaja = await Caja.find({fechaCaja:fechaActual})
-    const veces = infoCaja.length
-    return veces
+
+    return infoCaja[0].vecesAbierta
+    
 }
 
 
