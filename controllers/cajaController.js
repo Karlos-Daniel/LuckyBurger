@@ -1,4 +1,4 @@
-const {Caja} = require('../models');
+const {Caja,ContraCaja} = require('../models');
 const { response, json } = require("express");
 
 const cajaAbierta = async(req, res=response)=>{
@@ -113,12 +113,42 @@ const cantidadVecesAbiertaHoy = async(req, res=response)=>{
 }
 
 const cambiarContraCaja = async(req,res=response)=>{
-    const {c1,c2,c3,c4} = req.body
-    
+
+    try {
+        const {c1,c2,c3,c4} = req.body
+    const id = "64a308a95cd361a332dda682"
+
+    await ContraCaja.findByIdAndUpdate(id,{c1:c1,c2:c2,c3:c3,c4:c4},{new:true})
+
+    return res.status(200).json({
+        msg:'contraseña actualizada'
+    })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error)
+    }
 }
+
+const getContraCaja = async(req,res=response)=>{
+    try {
+        const id = "64a308a95cd361a332dda682"
+
+        const contra = await ContraCaja.findById(id)
+
+        return res.status(200).json(contra)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error)
+    }
+}
+
+
 
 module.exports = {
     cajaAbierta,
     tiempoAbierta,
+    cambiarContraCaja,
+    getContraCaja,
     cantidadVecesAbiertaHoy
 }
