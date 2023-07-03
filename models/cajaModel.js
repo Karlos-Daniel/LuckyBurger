@@ -13,6 +13,11 @@ const cajaSchema = Schema({
     status:{
         type:Boolean,
         require: true
+    },
+    muchoTiempo:{
+        type:Boolean,
+        default:false,
+        require: true
     }
     
 });

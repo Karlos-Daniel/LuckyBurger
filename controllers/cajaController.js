@@ -55,6 +55,37 @@ const cajaAbierta = async(req, res=response)=>{
   
 }
 
+const tiempoAbierta = async(req,res=response)=>{
+
+    try {
+        const {status} = req.params
+
+        const dia = new Date().getDate();
+        const mes = new Date().getMonth();
+        const year = new Date().getFullYear();
+        const fechaActual = `${dia}/${mes}/${year}`;
+    
+        const infoCaja = await Caja.findOne({fechaCaja:fechaActual})
+        if(infoCaja && status==1 || status=='1'){
+    
+            await Caja.findByIdAndUpdate(infoCaja._id,{muchoTiempo:true},{new:true})
+            const newInfo = await Caja.findOne({fechaCaja:fechaActual})
+            return res.status(200).json(newInfo)
+        }else{
+            await Caja.findByIdAndUpdate(infoCaja._id,{muchoTiempo:false},{new:true})
+            const newInfo = await Caja.findOne({fechaCaja:fechaActual})
+            return res.status(200).json(newInfo)
+        }
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({msg:error})
+    }
+
+   
+
+
+}
 
 const cantidadVecesAbiertaHoy = async(req, res=response)=>{
 
@@ -83,5 +114,6 @@ const cantidadVecesAbiertaHoy = async(req, res=response)=>{
 
 module.exports = {
     cajaAbierta,
+    tiempoAbierta,
     cantidadVecesAbiertaHoy
 }
