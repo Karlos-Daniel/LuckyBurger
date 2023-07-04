@@ -84,7 +84,8 @@ const crearCompra = async(req,res=response)=>{
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            msg: 'algo salio mal en el Backend'
+            msg: 'algo salio mal en el Backend',
+            error
         })
     }
 
