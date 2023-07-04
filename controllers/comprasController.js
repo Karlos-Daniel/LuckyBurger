@@ -47,10 +47,10 @@ const crearCompra = async(req,res=response)=>{
 
     //Saco el Id de venta y lo declaro como constante
     
-    compra.compra.shift()
+    console.log(compra.compra[1]);
     //console.log(compra.compra);
     //Mapeo el pedido para poder añadirle venta: idVenta a cada detalleVenta
-    compra.compra=compra.compra.map(element=>{
+    compra.compra=compra.compra[1].map(element=>{
         return {...element,compra:IdCompra}  
     });
     let arr = []
@@ -85,7 +85,7 @@ const crearCompra = async(req,res=response)=>{
         console.log(error);
         return res.status(500).json({
             msg: 'algo salio mal en el Backend',
-            error
+            error:error
         })
     }
 
