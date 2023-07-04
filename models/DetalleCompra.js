@@ -4,7 +4,7 @@ const compraSchema = Schema({
     
     producto:{
         type: Schema.Types.ObjectId,
-        ref: 'Producto',
+        ref: 'Insumo',
         require: true
     },
     proveedor:{

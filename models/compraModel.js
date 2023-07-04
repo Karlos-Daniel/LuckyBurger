@@ -14,6 +14,7 @@ const compraSchema = Schema({
     },
     fechaCompra: {
         type: Date,
+        default: Date.now,
         require: true
     },
     
