@@ -20,7 +20,6 @@ router.get('/inventario/:id',[
 
 router.post('/crear/inventarios',[
     check('insumo','El insumo es obligatorio').not().isEmpty(),
-    check('stock','El insumo es obligatorio').not().isEmpty(),
     validarCampos
 ],crearInventario);
 

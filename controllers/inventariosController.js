@@ -108,7 +108,8 @@ const crearInventario = async(req,res = response)=>{
 
     try {
         
-        const {insumo, stock} = req.body;
+        const {insumo} = req.body;
+        console.log(req.body);
         const categoriaDB = await Inventario.findOne({insumo:insumo});
         // console.log(nombre);
         if(categoriaDB){
@@ -120,10 +121,10 @@ const crearInventario = async(req,res = response)=>{
         //Generar data a guardar
         const data = {
             insumo, 
-            stock
         }
-        const Inventario = new Inventario(data);
-        await Inventario.save();
+
+        const newInventario = new Inventario(data);
+        await newInventario.save();
         return res.status(201).json(Inventario);
 
     } catch (error) {

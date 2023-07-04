@@ -6,11 +6,11 @@ const inventarioSchema = Schema({
         require: true,
         unique:true
     },
-    stock:{
-        type: Number,
-        require: true,
-        default: 0,
-    },
+    // stock:{
+    //     type: Number,
+    //     require: true,
+    //     default: 0,
+    // },
     
 }); inventarioSchema.methods.toJSON = function(){
     const { __v, _id,... inventario }=this.toObject();

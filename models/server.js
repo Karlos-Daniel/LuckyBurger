@@ -14,6 +14,7 @@ const routesPedido = require('../routes/pedidos.routes');
 const routesCompra = require('../routes/compra.routes');
 const routesEgreso = require('../routes/egreso.routes');
 const routesCaja = require('../routes/caja.routes');
+const routesInventario = require('../routes/inventario.routes')
 const {socketController} = require('../controllers/socketController')
 
 const socketIO = require("socket.io");
@@ -23,11 +24,11 @@ class server{
         this.app = express();
         this.port = process.env.PORT;
         this.server = require('http').createServer(this.app);
-        this.io = socketIO(this.server,{
-            cors: {
-                origin: "*",
-              },
-        })
+        // this.io = socketIO(this.server,{
+        //     cors: {
+        //         origin: "*",
+        //       },
+        // })
         //DB
         this.conectarDB();
 
@@ -37,7 +38,7 @@ class server{
         //Rutas de mi aplicacion
         this.routes();
 
-        this.sockets();
+        //this.sockets();
     }
 
     async conectarDB(){
@@ -54,9 +55,9 @@ class server{
         }));
     }
 
-    sockets(){
-        this.io.on('connection',socketController)
-    }
+    // sockets(){
+    //     this.io.on('connection',socketController)
+    // }
 
     routes(){
         
@@ -70,6 +71,7 @@ class server{
         this.app.use(routesPedido);
         this.app.use(routesCompra);
         this.app.use(routesEgreso);
+        this.app.use(routesInventario)
         this.app.use(routesCaja)
                 
     }

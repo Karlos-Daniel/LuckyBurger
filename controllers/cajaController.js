@@ -94,7 +94,8 @@ const cantidadVecesAbiertaHoy = async(req, res=response)=>{
     const mes = new Date().getMonth();
     const year = new Date().getFullYear();
     const fechaActual = `${dia}/${mes}/${year}`;
-
+    console.log(dia);
+    console.log(Date.now());
     const infoCaja = await Caja.findOne({fechaCaja:fechaActual})
 
     return res.status(200).json(infoCaja)

@@ -28,7 +28,9 @@ const productosGetProducto = async (req = request, res = response) => {
           }
           return 0;
         })
-    resp[1]=resp[1].filter(e => !(e.categoria.nombreCategoria == "ADICIONES"));
+        //console.log(resp[1]);
+    resp[1]=resp[1].filter(e => !(e.categoria.nombreCategoria === "ADICIONES"));
+
         console.log(resp[1]);
     return res.json({
         resp
