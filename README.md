@@ -1,4 +1,4 @@
-# UrielAsados
-software a medida de Uriel Asados
+# Lucky Burger
+software a medida de LuckyBurger
 
-Se encarga de llevar el registro de pedidos y contabilidad basica del restaurante
+gestión de pedidos, proveedores, productos, insumos, egresos y balances de cuenta para venta
